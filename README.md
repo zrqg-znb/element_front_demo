@@ -14,14 +14,13 @@
 
 ## 开发环境
 
-- Node.js >= 16
-- npm >= 7
+- Node.js >= 22
 
 ## 快速开始
 
 1. 克隆项目
 ```bash
-git clone [项目地址]
+git clone https://github.com/zrqg-znb/element_front_demo.git
 cd element-ui-demo
 ```
 
