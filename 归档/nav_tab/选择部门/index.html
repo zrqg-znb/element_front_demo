@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分级下拉框（基于隐藏Option）</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="custom-select-wrapper">
+    <div class="custom-select-trigger">
+        <span id="selected-value-display">请选择</span>
+        <span class="arrow"></span>
+    </div>
+    <div class="custom-options-container">
+        <!-- 这里是自定义的UI，用于展示分级结构 -->
+        <!-- 这些div只是视觉上的分组，实际的option在下面的隐藏select中 -->
+        <div class="option-group" data-group-id="groupA">
+            <div class="group-header">
+                <span class="toggle-icon">+</span>
+                <span class="group-title">一级分类A</span>
+            </div>
+            <div class="group-items">
+                <!-- 这里的data-option-value对应下方隐藏select中的option的value -->
+                <div class="option-item" data-option-value="valueA1">选项 A1</div>
+                <div class="option-item" data-option-value="valueA2">选项 A2</div>
+            </div>
+        </div>
+
+        <div class="option-group" data-group-id="groupB">
+            <div class="group-header">
+                <span class="toggle-icon">+</span>
+                <span class="group-title">一级分类B</span>
+            </div>
+            <div class="group-items">
+                <div class="option-item" data-option-value="valueB1">选项 B1</div>
+                <div class="option-item" data-option-value="valueB2">选项 B2</div>
+                <div class="option-item" data-option-value="valueB3">选项 B3</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 真正的select元素，用于存储和管理option -->
+<!-- 它的display设置为none，用户看不到，但JS会操作它 -->
+<select id="real-select" style="display: none;">
+    <option value="">请选择</option>
+    <option value="valueA1">选项 A1</option>
+    <option value="valueA2">选项 A2</option>
+    <option value="valueB1">选项 B1</option>
+    <option value="valueB2">选项 B2</option>
+    <option value="valueB3">选项 B3</option>
+</select>
+
+<div id="content-display" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;">
+    选择的内容会显示在这里。
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
