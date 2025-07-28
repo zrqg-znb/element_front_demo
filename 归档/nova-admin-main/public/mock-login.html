@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mock Login</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f5f7;
+    }
+    .container {
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      margin-bottom: 24px;
+      color: #333;
+    }
+    button {
+      background-color: #007aff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mock Corporate Login</h1>
+    <p>Click the button to simulate logging in.</p>
+    <button onclick="login()">Login and Redirect</button>
+  </div>
+
+  <script>
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    function login() {
+      // Set dummy tokens in cookies
+      document.cookie = "accessToken=mock_access_token; path=/";
+      document.cookie = "refreshToken=mock_refresh_token; path=/";
+
+      // Redirect back to the original application
+      const redirectUrl = getQueryParam('redirect') || '/';
+      window.location.href = redirectUrl;
+    }
+  </script>
+</body>
+</html>
