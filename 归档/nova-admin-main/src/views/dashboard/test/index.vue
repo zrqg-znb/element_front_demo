@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref, watch } from 'vue'
 import type { VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
-import { useAppStore } from '@/store'
-
-const appStore = useAppStore()
 
 const panels = ref([
   {
@@ -28,6 +25,9 @@ const name = ref('IDVP')
 const selectedCar = ref('IDVP SW 200')
 const loading = ref(false)
 
+// 用于取消之前的请求
+let currentAbortController: AbortController | null = null
+
 interface RowVO {
   id: number
   name: string
@@ -39,27 +39,8 @@ interface RowVO {
 }
 
 const tableRef = ref<VxeTableInstance>()
-
 const tableClass = ref('')
-
-watch(
-  () => appStore.colorMode,
-  (newValue) => {
-    tableClass.value = newValue === 'dark' ? 'vxe-table-demo-theme--dark' : ''
-  },
-  { immediate: true },
-)
-
 const tableData = ref<RowVO[]>([])
-
-const customConfig = reactive<VxeTablePropTypes.CustomConfig>({
-  storage: true,
-  mode: 'drawer',
-  checkMethod({ column }) {
-    return !['seq', 'name', 'test.num'].includes(column.field)
-  },
-})
-
 const columnConfig = reactive<VxeTablePropTypes.ColumnConfig>({
   resizable: true,
 })
@@ -118,27 +99,55 @@ const mockDataMap: Record<string, RowVO[]> = {
 }
 
 // 模拟API请求
-async function fetchTableData(carType: string): Promise<RowVO[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
+async function fetchTableData(carType: string, signal?: AbortSignal): Promise<RowVO[]> {
+  return new Promise((resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      if (signal?.aborted) {
+        reject(new Error('Request aborted'))
+        return
+      }
       resolve([...(mockDataMap[carType] || [])])
-    }, 1000)
+    }, 1500)
+
+    // 监听取消信号
+    signal?.addEventListener('abort', () => {
+      clearTimeout(timeoutId)
+      reject(new Error('Request aborted'))
+    })
   })
 }
 
 // 加载数据的方法
 async function loadData(carType: string) {
+  // 取消之前的请求
+  if (currentAbortController) {
+    currentAbortController.abort()
+  }
+
+  // 创建新的AbortController
+  currentAbortController = new AbortController()
+  const signal = currentAbortController.signal
+
   loading.value = true
   try {
-    const data = await fetchTableData(carType)
-    tableData.value = data
+    const data = await fetchTableData(carType, signal)
+    // 检查请求是否已被取消
+    if (!signal.aborted) {
+      tableData.value = data
+    }
   }
   catch (error) {
-    console.error('Failed to load data:', error)
-    tableData.value = []
+    // 只有在请求未被取消时才处理错误
+    if (!signal.aborted) {
+      console.error('Failed to load data:', error)
+      tableData.value = []
+    }
   }
   finally {
-    loading.value = false
+    // 只有在请求未被取消时才设置loading为false
+    if (!signal.aborted) {
+      loading.value = false
+    }
   }
 }
 
@@ -210,11 +219,9 @@ onMounted(async () => {
             <div class="mb-2 text-lg font-medium">
               当前空间：{{ panel.Type }}     车型: {{ selectedCar }} ({{ tableData.length }} 条记录)
             </div>
-
             <vxe-grid
               :id="`table-${name}-${selectedCar.replace(/\s+/g, '-')}`"
               ref="tableRef"
-              border
               :loading="loading"
               :data="tableData"
               :columns="[
@@ -227,7 +234,6 @@ onMounted(async () => {
                 { field: 'test.num', title: '测试num', width: 100 },
                 { field: 'test.level', title: '测试level', width: 100 },
               ]"
-              :custom-config="customConfig"
               :column-config="columnConfig"
               :toolbar-config="{
                 custom: true,
@@ -245,6 +251,5 @@ onMounted(async () => {
   </div>
 </template>
 
-<style lang="scss" scoped>
-@import './dark.scss';
+<style scoped>
 </style>
