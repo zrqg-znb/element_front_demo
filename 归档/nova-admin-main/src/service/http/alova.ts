@@ -57,6 +57,8 @@ export function createAlovaInstance(
     timeout: _alovaConfig.timeout,
 
     beforeRequest: onAuthRequired((method) => {
+      // 添加credentials配置，使请求自动携带cookie
+      method.config.credentials = 'include'
       if (method.meta?.isFormPost) {
         method.config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         method.data = new URLSearchParams(method.data as URLSearchParams).toString()
