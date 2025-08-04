@@ -18,6 +18,8 @@ export function setupRouterGuard(router: Router) {
     }
     // 开始 loadingBar
     appStore.showProgress && window.$loadingBar?.start()
+    // 设置loadFlag为false，防止页面切换时显示空白
+    appStore.loadFlag = false
 
     // 判断有无TOKEN,登录鉴权
     const isLogin = Boolean(getCookie('accessToken'))
@@ -77,5 +79,9 @@ export function setupRouterGuard(router: Router) {
     document.title = `${to.meta.title} - ${title}`
     // 结束 loadingBar
     appStore.showProgress && window.$loadingBar?.finish()
+    // 设置loadFlag为true，恢复页面显示
+    setTimeout(() => {
+      appStore.loadFlag = true
+    }, 100)
   })
 }
