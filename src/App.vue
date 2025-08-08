@@ -1,20 +1,24 @@
+<script setup lang="ts">
+import { naiveI18nOptions } from '@/utils'
+import { darkTheme } from 'naive-ui'
+import { useAppStore } from './store'
+
+const appStore = useAppStore()
+
+const naiveLocale = computed(() => {
+  return naiveI18nOptions[appStore.lang] ? naiveI18nOptions[appStore.lang] : naiveI18nOptions.enUS
+},
+)
+</script>
+
 <template>
-  <router-view />
+  <n-config-provider
+    class="wh-full" inline-theme-disabled :theme="appStore.colorMode === 'dark' ? darkTheme : null"
+    :locale="naiveLocale.locale" :date-locale="naiveLocale.dateLocale" :theme-overrides="appStore.theme"
+  >
+    <naive-provider>
+      <router-view />
+      <Watermark :show-watermark="appStore.showWatermark" />
+    </naive-provider>
+  </n-config-provider>
 </template>
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin: 0;
-}
-</style>
