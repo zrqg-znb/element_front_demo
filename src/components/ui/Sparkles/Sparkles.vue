@@ -38,8 +38,7 @@ const ctx = ref<CanvasRenderingContext2D | null>(null)
 
 // Adjust canvas size on mount and resize
 function resizeCanvas() {
-  if (!canvasRef.value || !containerRef.value)
-    return
+  if (!canvasRef.value || !containerRef.value) return
 
   const dpr = window.devicePixelRatio || 1
   const rect = containerRef.value.getBoundingClientRect()
@@ -76,24 +75,19 @@ function generateParticles(): void {
 }
 
 function updateAndDrawParticles() {
-  if (!ctx.value || !canvasRef.value)
-    return
+  if (!ctx.value || !canvasRef.value) return
 
   const canvas = canvasRef.value
   ctx.value.clearRect(0, 0, canvas.width, canvas.height)
 
-  particles.value = particles.value.map((particle) => {
+  particles.value = particles.value.map(particle => {
     let newX = particle.x + particle.vx
     let newY = particle.y + particle.vy
 
-    if (newX < -2)
-      newX = 102
-    if (newX > 102)
-      newX = -2
-    if (newY < -2)
-      newY = 102
-    if (newY > 102)
-      newY = -2
+    if (newX < -2) newX = 102
+    if (newX > 102) newX = -2
+    if (newY < -2) newY = 102
+    if (newY > 102) newY = -2
 
     const newPhase = (particle.phase + particle.phaseSpeed) % (Math.PI * 2)
     const opacity = 0.3 + (Math.sin(newPhase) * 0.3 + 0.3)
@@ -128,8 +122,7 @@ const { pause, resume } = useRafFn(updateAndDrawParticles, { immediate: false })
 let resizeObserver: ResizeObserver | undefined
 
 onMounted(() => {
-  if (!canvasRef.value)
-    return
+  if (!canvasRef.value) return
 
   ctx.value = canvasRef.value.getContext('2d')
   resizeCanvas()
@@ -158,9 +151,6 @@ onBeforeUnmount(() => {
     class="relative size-full overflow-hidden will-change-transform"
     :style="{ background }"
   >
-    <canvas
-      ref="canvasRef"
-      class="absolute inset-0 size-full"
-    />
+    <canvas ref="canvasRef" class="absolute inset-0 size-full" />
   </div>
 </template>

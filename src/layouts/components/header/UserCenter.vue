@@ -60,31 +60,19 @@ function handleSelect(key: string | number) {
       },
     })
   }
-  if (key === 'userCenter')
-    router.push('/userCenter')
+  if (key === 'userCenter') router.push('/userCenter')
 
-  if (key === 'guthub')
-    window.open('https://github.com/chansee97/nova-admin')
+  if (key === 'guthub') window.open('https://github.com/chansee97/nova-admin')
 
-  if (key === 'gitee')
-    window.open('https://gitee.com/chansee97/nova-admin')
+  if (key === 'gitee') window.open('https://gitee.com/chansee97/nova-admin')
 
-  if (key === 'docs')
-    window.open('https://nova-admin-docs.pages.dev/')
+  if (key === 'docs') window.open('https://nova-admin-docs.pages.dev/')
 }
 </script>
 
 <template>
-  <n-dropdown
-    trigger="click"
-    :options="options"
-    @select="handleSelect"
-  >
-    <n-avatar
-      round
-      class="cursor-pointer"
-      :src="userInfo?.avatar"
-    >
+  <n-dropdown trigger="click" :options="options" @select="handleSelect">
+    <n-avatar round class="cursor-pointer" :src="userInfo?.avatar">
       <template #fallback>
         <div class="wh-full flex-center">
           <icon-park-outline-user />

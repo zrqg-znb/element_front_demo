@@ -48,53 +48,253 @@ const columnConfig = reactive<VxeTablePropTypes.ColumnConfig>({
 // 模拟不同车型的数据
 const mockDataMap: Record<string, RowVO[]> = {
   'IDVP SW 200': [
-    { id: 10001, name: 'IDVP-Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Beijing', test: { num: 0, level: 1 } },
-    { id: 10002, name: 'IDVP-Test2', role: 'Test', sex: 'Women', age: 22, address: 'Shanghai', test: { num: 1, level: 2 } },
-    { id: 10003, name: 'IDVP-Test3', role: 'Designer', sex: 'Man', age: 25, address: 'Guangzhou', test: { num: 2, level: 3 } },
+    {
+      id: 10001,
+      name: 'IDVP-Test1',
+      role: 'Develop',
+      sex: 'Man',
+      age: 28,
+      address: 'Beijing',
+      test: { num: 0, level: 1 },
+    },
+    {
+      id: 10002,
+      name: 'IDVP-Test2',
+      role: 'Test',
+      sex: 'Women',
+      age: 22,
+      address: 'Shanghai',
+      test: { num: 1, level: 2 },
+    },
+    {
+      id: 10003,
+      name: 'IDVP-Test3',
+      role: 'Designer',
+      sex: 'Man',
+      age: 25,
+      address: 'Guangzhou',
+      test: { num: 2, level: 3 },
+    },
   ],
   'IDVP SW 201': [
-    { id: 20001, name: 'IDVP201-User1', role: 'PM', sex: 'Man', age: 32, address: 'Guangzhou', test: { num: 2, level: 3 } },
-    { id: 20002, name: 'IDVP201-User2', role: 'Designer', sex: 'Women', age: 24, address: 'Shenzhen', test: { num: 3, level: 4 } },
-    { id: 20003, name: 'IDVP201-User3', role: 'Tester', sex: 'Man', age: 26, address: 'Hangzhou', test: { num: 4, level: 5 } },
+    {
+      id: 20001,
+      name: 'IDVP201-User1',
+      role: 'PM',
+      sex: 'Man',
+      age: 32,
+      address: 'Guangzhou',
+      test: { num: 2, level: 3 },
+    },
+    {
+      id: 20002,
+      name: 'IDVP201-User2',
+      role: 'Designer',
+      sex: 'Women',
+      age: 24,
+      address: 'Shenzhen',
+      test: { num: 3, level: 4 },
+    },
+    {
+      id: 20003,
+      name: 'IDVP201-User3',
+      role: 'Tester',
+      sex: 'Man',
+      age: 26,
+      address: 'Hangzhou',
+      test: { num: 4, level: 5 },
+    },
   ],
   'IDVP SW 290': [
-    { id: 30001, name: 'IDVP290-Admin', role: 'Admin', sex: 'Man', age: 35, address: 'Hangzhou', test: { num: 4, level: 5 } },
-    { id: 30002, name: 'IDVP290-Manager', role: 'Manager', sex: 'Women', age: 33, address: 'Nanjing', test: { num: 5, level: 6 } },
+    {
+      id: 30001,
+      name: 'IDVP290-Admin',
+      role: 'Admin',
+      sex: 'Man',
+      age: 35,
+      address: 'Hangzhou',
+      test: { num: 4, level: 5 },
+    },
+    {
+      id: 30002,
+      name: 'IDVP290-Manager',
+      role: 'Manager',
+      sex: 'Women',
+      age: 33,
+      address: 'Nanjing',
+      test: { num: 5, level: 6 },
+    },
   ],
   'ADIP SW 200': [
-    { id: 40001, name: 'ADIP-Manager', role: 'Manager', sex: 'Women', age: 30, address: 'Nanjing', test: { num: 5, level: 6 } },
-    { id: 40002, name: 'ADIP-Lead', role: 'Lead', sex: 'Man', age: 33, address: 'Wuhan', test: { num: 6, level: 7 } },
-    { id: 40003, name: 'ADIP-Dev', role: 'Developer', sex: 'Women', age: 27, address: 'Chengdu', test: { num: 7, level: 8 } },
+    {
+      id: 40001,
+      name: 'ADIP-Manager',
+      role: 'Manager',
+      sex: 'Women',
+      age: 30,
+      address: 'Nanjing',
+      test: { num: 5, level: 6 },
+    },
+    {
+      id: 40002,
+      name: 'ADIP-Lead',
+      role: 'Lead',
+      sex: 'Man',
+      age: 33,
+      address: 'Wuhan',
+      test: { num: 6, level: 7 },
+    },
+    {
+      id: 40003,
+      name: 'ADIP-Dev',
+      role: 'Developer',
+      sex: 'Women',
+      age: 27,
+      address: 'Chengdu',
+      test: { num: 7, level: 8 },
+    },
   ],
   'ADIP SW 201': [
-    { id: 50001, name: 'ADIP201-Dev', role: 'Developer', sex: 'Man', age: 27, address: 'Chengdu', test: { num: 7, level: 8 } },
-    { id: 50002, name: 'ADIP201-QA', role: 'QA', sex: 'Women', age: 25, address: 'Xian', test: { num: 8, level: 9 } },
+    {
+      id: 50001,
+      name: 'ADIP201-Dev',
+      role: 'Developer',
+      sex: 'Man',
+      age: 27,
+      address: 'Chengdu',
+      test: { num: 7, level: 8 },
+    },
+    {
+      id: 50002,
+      name: 'ADIP201-QA',
+      role: 'QA',
+      sex: 'Women',
+      age: 25,
+      address: 'Xian',
+      test: { num: 8, level: 9 },
+    },
   ],
   'ADIP SW 290': [
-    { id: 60001, name: 'ADIP290-Tester', role: 'Tester', sex: 'Women', age: 26, address: 'Xian', test: { num: 8, level: 9 } },
-    { id: 60002, name: 'ADIP290-Analyst', role: 'Analyst', sex: 'Man', age: 29, address: 'Tianjin', test: { num: 9, level: 10 } },
+    {
+      id: 60001,
+      name: 'ADIP290-Tester',
+      role: 'Tester',
+      sex: 'Women',
+      age: 26,
+      address: 'Xian',
+      test: { num: 8, level: 9 },
+    },
+    {
+      id: 60002,
+      name: 'ADIP290-Analyst',
+      role: 'Analyst',
+      sex: 'Man',
+      age: 29,
+      address: 'Tianjin',
+      test: { num: 9, level: 10 },
+    },
   ],
-  'RNC_ww200': [
-    { id: 70001, name: 'RNC-Engineer', role: 'Engineer', sex: 'Man', age: 31, address: 'Qingdao', test: { num: 10, level: 11 } },
-    { id: 70002, name: 'RNC-Architect', role: 'Architect', sex: 'Women', age: 34, address: 'Dalian', test: { num: 11, level: 12 } },
+  RNC_ww200: [
+    {
+      id: 70001,
+      name: 'RNC-Engineer',
+      role: 'Engineer',
+      sex: 'Man',
+      age: 31,
+      address: 'Qingdao',
+      test: { num: 10, level: 11 },
+    },
+    {
+      id: 70002,
+      name: 'RNC-Architect',
+      role: 'Architect',
+      sex: 'Women',
+      age: 34,
+      address: 'Dalian',
+      test: { num: 11, level: 12 },
+    },
   ],
-  'RNC_22_01': [
-    { id: 80001, name: 'RNC-Architect', role: 'Architect', sex: 'Women', age: 34, address: 'Dalian', test: { num: 11, level: 12 } },
-    { id: 80002, name: 'RNC-Consultant', role: 'Consultant', sex: 'Man', age: 36, address: 'Shenyang', test: { num: 12, level: 13 } },
+  RNC_22_01: [
+    {
+      id: 80001,
+      name: 'RNC-Architect',
+      role: 'Architect',
+      sex: 'Women',
+      age: 34,
+      address: 'Dalian',
+      test: { num: 11, level: 12 },
+    },
+    {
+      id: 80002,
+      name: 'RNC-Consultant',
+      role: 'Consultant',
+      sex: 'Man',
+      age: 36,
+      address: 'Shenyang',
+      test: { num: 12, level: 13 },
+    },
   ],
-  'RNC_cc_290': [
-    { id: 90001, name: 'RNC-Specialist', role: 'Specialist', sex: 'Women', age: 28, address: 'Harbin', test: { num: 13, level: 14 } },
+  RNC_cc_290: [
+    {
+      id: 90001,
+      name: 'RNC-Specialist',
+      role: 'Specialist',
+      sex: 'Women',
+      age: 28,
+      address: 'Harbin',
+      test: { num: 13, level: 14 },
+    },
   ],
-  'TMS_MM_200': [
-    { id: 100001, name: 'TMS-Coordinator', role: 'Coordinator', sex: 'Man', age: 30, address: 'Jinan', test: { num: 14, level: 15 } },
-    { id: 100002, name: 'TMS-Supervisor', role: 'Supervisor', sex: 'Women', age: 32, address: 'Zhengzhou', test: { num: 15, level: 16 } },
+  TMS_MM_200: [
+    {
+      id: 100001,
+      name: 'TMS-Coordinator',
+      role: 'Coordinator',
+      sex: 'Man',
+      age: 30,
+      address: 'Jinan',
+      test: { num: 14, level: 15 },
+    },
+    {
+      id: 100002,
+      name: 'TMS-Supervisor',
+      role: 'Supervisor',
+      sex: 'Women',
+      age: 32,
+      address: 'Zhengzhou',
+      test: { num: 15, level: 16 },
+    },
   ],
-  'TMS_01': [
-    { id: 110001, name: 'TMS-Director', role: 'Director', sex: 'Man', age: 38, address: 'Changsha', test: { num: 16, level: 17 } },
+  TMS_01: [
+    {
+      id: 110001,
+      name: 'TMS-Director',
+      role: 'Director',
+      sex: 'Man',
+      age: 38,
+      address: 'Changsha',
+      test: { num: 16, level: 17 },
+    },
   ],
-  'TMS_001': [
-    { id: 120001, name: 'TMS-VP', role: 'VP', sex: 'Women', age: 40, address: 'Nanchang', test: { num: 17, level: 18 } },
-    { id: 120002, name: 'TMS-CTO', role: 'CTO', sex: 'Man', age: 42, address: 'Hefei', test: { num: 18, level: 19 } },
+  TMS_001: [
+    {
+      id: 120001,
+      name: 'TMS-VP',
+      role: 'VP',
+      sex: 'Women',
+      age: 40,
+      address: 'Nanchang',
+      test: { num: 17, level: 18 },
+    },
+    {
+      id: 120002,
+      name: 'TMS-CTO',
+      role: 'CTO',
+      sex: 'Man',
+      age: 42,
+      address: 'Hefei',
+      test: { num: 18, level: 19 },
+    },
   ],
 }
 
@@ -135,15 +335,13 @@ async function loadData(carType: string) {
     if (!signal.aborted) {
       tableData.value = data
     }
-  }
-  catch (error) {
+  } catch (error) {
     // 只有在请求未被取消时才处理错误
     if (!signal.aborted) {
       console.error('Failed to load data:', error)
       tableData.value = []
     }
-  }
-  finally {
+  } finally {
     // 只有在请求未被取消时才设置loading为false
     if (!signal.aborted) {
       loading.value = false
@@ -166,13 +364,17 @@ async function handleCarSelect(car: string) {
 }
 
 // 监听tab切换
-watch(name, async () => {
-  const firstCar = getCurrentFirstCar()
-  if (firstCar && selectedCar.value !== firstCar) {
-    selectedCar.value = firstCar
-    await loadData(firstCar)
-  }
-}, { immediate: true })
+watch(
+  name,
+  async () => {
+    const firstCar = getCurrentFirstCar()
+    if (firstCar && selectedCar.value !== firstCar) {
+      selectedCar.value = firstCar
+      await loadData(firstCar)
+    }
+  },
+  { immediate: true },
+)
 
 onMounted(async () => {
   // 加载初始数据
@@ -184,12 +386,7 @@ onMounted(async () => {
 
 <template>
   <div class="w-full h-full">
-    <n-tabs
-      v-model:value="name"
-      type="card"
-      tab-style="min-width: 120px;"
-      class="mb-4"
-    >
+    <n-tabs v-model:value="name" type="card" tab-style="min-width: 120px;" class="mb-4">
       <n-tab-pane
         v-for="panel in panels"
         :key="panel.Type"
@@ -217,7 +414,7 @@ onMounted(async () => {
           <!-- 右侧表格区域 -->
           <div class="flex-1" :class="tableClass">
             <div class="mb-2 text-lg font-medium">
-              当前空间：{{ panel.Type }}     车型: {{ selectedCar }} ({{ tableData.length }} 条记录)
+              当前空间：{{ panel.Type }} 车型: {{ selectedCar }} ({{ tableData.length }} 条记录)
             </div>
             <vxe-grid
               :id="`table-${name}-${selectedCar.replace(/\s+/g, '-')}`"
@@ -251,5 +448,4 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

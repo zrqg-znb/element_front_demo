@@ -6,8 +6,7 @@ export const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'root',
     redirect: '/appRoot',
-    children: [
-    ],
+    children: [],
   },
 
   {
@@ -49,5 +48,4 @@ export const routes: RouteRecordRaw[] = [
       withoutTab: true,
     },
   },
-
 ]

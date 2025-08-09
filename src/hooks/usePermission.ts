@@ -5,14 +5,10 @@ import { isArray, isString } from 'radash'
 export function usePermission() {
   const authStore = useAuthStore()
 
-  function hasPermission(
-    permission?: Entity.RoleType | Entity.RoleType[],
-  ) {
-    if (!permission)
-      return true
+  function hasPermission(permission?: Entity.RoleType | Entity.RoleType[]) {
+    if (!permission) return true
 
-    if (!authStore.userInfo)
-      return false
+    if (!authStore.userInfo) return false
     const { role } = authStore.userInfo
 
     // 角色为super可直接通过

@@ -52,7 +52,7 @@ onBeforeUnmount(() => {
   }
 })
 
-watch(isVisible, (newValue) => {
+watch(isVisible, newValue => {
   if (newValue) {
     startTimeout()
   }
@@ -61,20 +61,13 @@ watch(isVisible, (newValue) => {
 
 <template>
   <div class="relative inline-block px-2">
-    <Transition
-      @after-enter="$emit('animationStart')"
-      @after-leave="$emit('animationComplete')"
-    >
+    <Transition @after-enter="$emit('animationStart')" @after-leave="$emit('animationComplete')">
       <div
         v-show="isVisible"
-        class="relative z-10 inline-block text-left text-neutral-900 dark:text-neutral-100" :class="[
-          props.class,
-        ]"
+        class="relative z-10 inline-block text-left text-neutral-900 dark:text-neutral-100"
+        :class="[props.class]"
       >
-        <template
-          v-for="(wordObj, wordIndex) in splitWords"
-          :key="wordObj.word + wordIndex"
-        >
+        <template v-for="(wordObj, wordIndex) in splitWords" :key="wordObj.word + wordIndex">
           <span
             class="inline-block whitespace-nowrap opacity-0"
             :style="{

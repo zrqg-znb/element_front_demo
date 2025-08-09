@@ -19,11 +19,16 @@ const appStore = useAppStore()
 <template>
   <n-layout class="wh-full" embedded>
     <n-layout
-      class="h-full flex flex-col" content-style="display: flex;flex-direction: column;min-height:100%;"
-      embedded :native-scrollbar="false"
+      class="h-full flex flex-col"
+      content-style="display: flex;flex-direction: column;min-height:100%;"
+      embedded
+      :native-scrollbar="false"
     >
       <n-layout-header bordered position="absolute" class="z-999">
-        <div v-if="!appStore.contentFullScreen" class="h-60px flex-y-center justify-between shrink-0">
+        <div
+          v-if="!appStore.contentFullScreen"
+          class="h-60px flex-y-center justify-between shrink-0"
+        >
           <Logo v-if="appStore.showLogo" />
           <Menu mode="horizontal" responsive />
           <div class="flex-y-center gap-1 h-full p-x-xl">
@@ -57,7 +62,9 @@ const appStore = useAppStore()
       </div>
       <n-layout-footer
         v-if="appStore.showFooter && !appStore.contentFullScreen"
-        bordered position="absolute" class="h-40px flex-center"
+        bordered
+        position="absolute"
+        class="h-40px flex-center"
       >
         {{ appStore.footerText }}
       </n-layout-footer>

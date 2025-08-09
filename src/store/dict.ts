@@ -29,8 +29,7 @@ export const useDictStore = defineStore('dict-store', {
 
       if (isExist) {
         return this.dictMap[code]
-      }
-      else {
+      } else {
         return await this.getDictByNet(code)
       }
     },
@@ -42,9 +41,10 @@ export const useDictStore = defineStore('dict-store', {
         // 同步至session
         session.set('dict', this.dictMap)
         return data
-      }
-      else {
-        throw new Error(`Failed to get ${code} dictionary from network, check ${code} field or network`)
+      } else {
+        throw new Error(
+          `Failed to get ${code} dictionary from network, check ${code} field or network`,
+        )
       }
     },
     initDict() {

@@ -24,5 +24,4 @@ namespace Entity {
     /** 备注 */
     remark?: string
   }
-
 }

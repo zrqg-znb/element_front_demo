@@ -20,13 +20,11 @@ const refElement = ref<HTMLElement | null>(null)
 const mouseState = inject('use3DCardMouseState') as ReturnType<typeof useMouseState>
 
 function handleAnimation(isMouseEntered: Readonly<Ref<boolean, boolean>>) {
-  if (!refElement.value)
-    return
+  if (!refElement.value) return
 
   if (isMouseEntered) {
     refElement.value.style.transform = `translateX(${props.translateX}px) translateY(${props.translateY}px) translateZ(${props.translateZ}px) rotateX(${props.rotateX}deg) rotateY(${props.rotateY}deg) rotateZ(${props.rotateZ}deg)`
-  }
-  else {
+  } else {
     refElement.value.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`
   }
 }

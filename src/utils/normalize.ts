@@ -10,8 +10,7 @@
  * ```
  */
 export function normalizeSizeUnits(bytes: number): string {
-  if (bytes === 0)
-    return '0 bytes'
+  if (bytes === 0) return '0 bytes'
 
   const units = ['bytes', 'KB', 'MB', 'GB']
   const index = Math.floor(Math.log(bytes) / Math.log(1024))

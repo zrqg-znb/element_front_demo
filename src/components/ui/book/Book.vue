@@ -3,7 +3,6 @@ import type { HTMLAttributes } from 'vue'
 import { cn } from '@/lib/utils'
 import { computed } from 'vue'
 import {
-
   BOOK_COLOR_MAP as colorMap,
   BOOK_RADIUS_MAP as radiusMap,
   BOOK_SHADOW_SIZE_MAP as shadowSizeMap,
@@ -46,7 +45,8 @@ const computedGradient = computed(() => {
   >
     <div
       :style="{ width: sizeMap[size].width, transition: `transform ${props.duration}ms ease` }"
-      class="relative aspect-[3/4] [transform-style:preserve-3d]" :class="[
+      class="relative aspect-[3/4] [transform-style:preserve-3d]"
+      :class="[
         isStatic
           ? '[transform:rotateY(-30deg)]'
           : '[transform:rotateY(0deg)] group-hover:[transform:rotateY(-30deg)]',

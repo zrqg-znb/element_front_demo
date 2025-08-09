@@ -19,7 +19,7 @@ const value = defineModel<LayoutMode>('value', { required: true })
           <div class="bg-[var(--divider-color)]" />
         </n-el>
       </template>
-      <span> {{ $t('app.leftMenu') }} </span>
+      <span>{{ $t('app.leftMenu') }}</span>
     </n-tooltip>
 
     <n-tooltip placement="bottom" trigger="hover">
@@ -35,7 +35,7 @@ const value = defineModel<LayoutMode>('value', { required: true })
           <div class="bg-[var(--divider-color)]" />
         </n-el>
       </template>
-      <span> {{ $t('app.topMenu') }} </span>
+      <span>{{ $t('app.topMenu') }}</span>
     </n-tooltip>
 
     <n-tooltip placement="bottom" trigger="hover">
@@ -52,21 +52,21 @@ const value = defineModel<LayoutMode>('value', { required: true })
           <div class="bg-[var(--divider-color)]" />
         </n-el>
       </template>
-      <span> {{ $t('app.mixMenu') }} </span>
+      <span>{{ $t('app.mixMenu') }}</span>
     </n-tooltip>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.grid{
+.grid {
   height: 60px;
   width: 86px;
-  gap:0.4em;
+  gap: 0.4em;
   padding: 0.4em;
   box-shadow: var(--box-shadow-1);
   border-radius: var(--border-radius);
 }
-.grid > div{
+.grid > div {
   border-radius: var(--border-radius);
 }
 </style>
