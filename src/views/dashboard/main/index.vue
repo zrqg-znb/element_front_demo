@@ -29,10 +29,34 @@ const requirementsData = reactive({
 
 // 最近活动
 const recentActivities = ref([
-  { id: 1, title: '自动驾驶系统代码审核完成', type: 'success', time: '10分钟前', department: '自动驾驶' },
-  { id: 2, title: 'MCU部门新增15个DTS问题单', type: 'warning', time: '30分钟前', department: 'MCU部门' },
-  { id: 3, title: '车机屏幕模块测试通过', type: 'success', time: '1小时前', department: '车机屏幕' },
-  { id: 4, title: '车控系统代码复杂度超标', type: 'error', time: '2小时前', department: '车控系统' },
+  {
+    id: 1,
+    title: '自动驾驶系统代码审核完成',
+    type: 'success',
+    time: '10分钟前',
+    department: '自动驾驶',
+  },
+  {
+    id: 2,
+    title: 'MCU部门新增15个DTS问题单',
+    type: 'warning',
+    time: '30分钟前',
+    department: 'MCU部门',
+  },
+  {
+    id: 3,
+    title: '车机屏幕模块测试通过',
+    type: 'success',
+    time: '1小时前',
+    department: '车机屏幕',
+  },
+  {
+    id: 4,
+    title: '车控系统代码复杂度超标',
+    type: 'error',
+    time: '2小时前',
+    department: '车控系统',
+  },
   { id: 5, title: '仪表系统新需求已添加', type: 'info', time: '3小时前', department: '仪表系统' },
   { id: 6, title: '娱乐系统集成测试开始', type: 'info', time: '5小时前', department: '娱乐系统' },
 ])
@@ -182,11 +206,23 @@ const requirementsChartOption = ref<ECOption>({
 // 初始化图表
 const { destroy: _destroyCodeHealth } = useEcharts('codeHealthChartRef', codeHealthChartOption)
 const { destroy: _destroyDts } = useEcharts('dtsChartRef', dtsChartOption)
-const { destroy: _destroyRequirements } = useEcharts('requirementsChartRef', requirementsChartOption)
+const { destroy: _destroyRequirements } = useEcharts(
+  'requirementsChartRef',
+  requirementsChartOption,
+)
 
 // 部门选择
 const selectedDepartment = ref('全部')
-const departments = ['全部', 'MCU部门', '车控系统', '自动驾驶', '车机屏幕', '车辆音响', '娱乐系统', '仪表系统']
+const departments = [
+  '全部',
+  'MCU部门',
+  '车控系统',
+  '自动驾驶',
+  '车机屏幕',
+  '车辆音响',
+  '娱乐系统',
+  '仪表系统',
+]
 
 // 关键指标
 const keyMetrics = reactive({
@@ -225,7 +261,9 @@ const filteredActivities = computed(() => {
       <n-gi>
         <n-card title="DTS问题单" size="small" class="metric-card">
           <template #header-extra>
-            <n-tag type="info">{{ Math.round(keyMetrics.resolvedDTS / keyMetrics.totalDTS * 100) }}%</n-tag>
+            <n-tag type="info">
+              {{ Math.round((keyMetrics.resolvedDTS / keyMetrics.totalDTS) * 100) }}%
+            </n-tag>
           </template>
           <div class="card-content">
             <div class="metric-value">{{ keyMetrics.totalDTS }}</div>
@@ -236,10 +274,16 @@ const filteredActivities = computed(() => {
       <n-gi>
         <n-card title="需求完成率" size="small" class="metric-card">
           <template #header-extra>
-            <n-tag type="success">{{ Math.round(keyMetrics.completedRequirements / keyMetrics.totalRequirements * 100) }}%</n-tag>
+            <n-tag type="success">
+              {{
+                Math.round((keyMetrics.completedRequirements / keyMetrics.totalRequirements) * 100)
+              }}%
+            </n-tag>
           </template>
           <div class="card-content">
-            <div class="metric-value">{{ keyMetrics.completedRequirements }}/{{ keyMetrics.totalRequirements }}</div>
+            <div class="metric-value">
+              {{ keyMetrics.completedRequirements }}/{{ keyMetrics.totalRequirements }}
+            </div>
             <div class="metric-label">已完成/总需求</div>
           </div>
         </n-card>
@@ -247,7 +291,10 @@ const filteredActivities = computed(() => {
       <n-gi>
         <n-card title="部门筛选" size="small" class="metric-card">
           <div class="card-content">
-            <n-select v-model:value="selectedDepartment" :options="departments.map(d => ({ label: d, value: d }))" />
+            <n-select
+              v-model:value="selectedDepartment"
+              :options="departments.map(d => ({ label: d, value: d }))"
+            />
           </div>
         </n-card>
       </n-gi>
@@ -276,7 +323,18 @@ const filteredActivities = computed(() => {
             <n-list-item v-for="activity in filteredActivities" :key="activity.id">
               <n-thing :title="activity.title" :title-extra="activity.time">
                 <template #header-extra>
-                  <n-tag :type="activity.type as 'success' | 'warning' | 'error' | 'info' | 'default' | 'primary'" size="small">
+                  <n-tag
+                    :type="
+                      activity.type as
+                        | 'success'
+                        | 'warning'
+                        | 'error'
+                        | 'info'
+                        | 'default'
+                        | 'primary'
+                    "
+                    size="small"
+                  >
                     {{ activity.department }}
                   </n-tag>
                 </template>
@@ -297,9 +355,7 @@ const filteredActivities = computed(() => {
                 <icon-park-outline-code-computer />
               </n-icon>
             </template>
-            <n-button type="primary" block>
-              查看详情
-            </n-button>
+            <n-button type="primary" block>查看详情</n-button>
           </n-card>
         </n-gi>
         <n-gi>
@@ -309,9 +365,7 @@ const filteredActivities = computed(() => {
                 <icon-park-outline-bug />
               </n-icon>
             </template>
-            <n-button type="primary" block>
-              查看详情
-            </n-button>
+            <n-button type="primary" block>查看详情</n-button>
           </n-card>
         </n-gi>
         <n-gi>
@@ -321,9 +375,7 @@ const filteredActivities = computed(() => {
                 <icon-park-outline-application />
               </n-icon>
             </template>
-            <n-button type="primary" block>
-              查看详情
-            </n-button>
+            <n-button type="primary" block>查看详情</n-button>
           </n-card>
         </n-gi>
       </n-grid>

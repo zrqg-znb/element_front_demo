@@ -16,11 +16,7 @@ interface ImportMetaEnv {
   /** 是否开启打包压缩 */
   readonly VITE_BUILD_COMPRESS?: 'Y' | 'N'
   /** 压缩算法类型 */
-  readonly VITE_COMPRESS_TYPE?:
-    | 'gzip'
-    | 'brotliCompress'
-    | 'deflate'
-    | 'deflateRaw'
+  readonly VITE_COMPRESS_TYPE?: 'gzip' | 'brotliCompress' | 'deflate' | 'deflateRaw'
   /** 路由模式 */
   readonly VITE_ROUTE_MODE?: 'hash' | 'web'
   /** 路由加载模式 */

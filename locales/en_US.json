@@ -133,7 +133,7 @@
     "dict": "Dictionary example"
   },
   "http": {
-    "400": "Syntax error in the request",
+    "400": "Request parameter error",
     "401": "User unauthorized",
     "403": "Server refused access",
     "404": "Requested resource does not exist",

@@ -72,8 +72,7 @@ const spring = useSpring(
 function updatePointerInteraction(clientX: number | null) {
   if (clientX !== null) {
     pointerInteracting.value = clientX - (pointerInteractionMovement.value ?? clientX)
-  }
-  else {
+  } else {
     pointerInteracting.value = null
   }
 
@@ -136,11 +135,11 @@ onBeforeUnmount(() => {
     <canvas
       ref="globeCanvasRef"
       class="size-full opacity-0 transition-opacity duration-1000 ease-in-out [contain:layout_paint_size]"
-      @pointerdown="(e) => updatePointerInteraction(e.clientX)"
+      @pointerdown="e => updatePointerInteraction(e.clientX)"
       @pointerup="updatePointerInteraction(null)"
       @pointerout="updatePointerInteraction(null)"
-      @mousemove="(e) => updateMovement(e.clientX)"
-      @touchmove="(e) => e.touches[0] && updateMovement(e.touches[0].clientX)"
+      @mousemove="e => updateMovement(e.clientX)"
+      @touchmove="e => e.touches[0] && updateMovement(e.touches[0].clientX)"
     />
   </div>
 </template>

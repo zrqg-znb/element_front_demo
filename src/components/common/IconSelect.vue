@@ -3,9 +3,7 @@ interface Props {
   disabled?: boolean
 }
 
-const {
-  disabled = false,
-} = defineProps<Props>()
+const { disabled = false } = defineProps<Props>()
 
 interface IconList {
   prefix: string
@@ -31,7 +29,7 @@ async function fetchIconAllList(nameList: string[]) {
   const targets = await Promise.all(nameList.map(fetchIconList))
 
   // 处理每个返回的图标数据
-  const iconList = targets.map((item) => {
+  const iconList = targets.map(item => {
     const icons = [
       ...(item.categories ? Object.values(item.categories).flat() : []),
       ...(item.uncategorized ? Object.values(item.uncategorized).flat() : []),
@@ -40,9 +38,9 @@ async function fetchIconAllList(nameList: string[]) {
   })
 
   // 处理本地图标
-  const svgNames = Object.keys(import.meta.glob('@/assets/svg-icons/*.svg')).map(
-    path => path.split('/').pop()?.replace('.svg', ''),
-  ).filter(Boolean) as string[] // 过滤掉 undefined 并断言为 string[]
+  const svgNames = Object.keys(import.meta.glob('@/assets/svg-icons/*.svg'))
+    .map(path => path.split('/').pop()?.replace('.svg', ''))
+    .filter(Boolean) as string[] // 过滤掉 undefined 并断言为 string[]
 
   // 在数组开头添加
   iconList.unshift({
@@ -88,8 +86,7 @@ function handleSelectIconTag(icon: string) {
 
 // 包含当前分类或所有图标列表
 const icons = computed(() => {
-  if (!iconList.value[currentTab.value])
-    return []
+  if (!iconList.value[currentTab.value]) return []
   const hasTag = !!currentTag.value
   return hasTag
     ? iconList.value[currentTab.value]?.categories?.[currentTag.value] || [] // 使用可选链
@@ -128,13 +125,22 @@ function clearIcon() {
         <nova-icon :icon="value" />
       </template>
     </n-button>
-    <n-input :value="value" readonly :placeholder="$t('components.iconSelector.inputPlaceholder')" />
+    <n-input
+      :value="value"
+      readonly
+      :placeholder="$t('components.iconSelector.inputPlaceholder')"
+    />
     <n-button type="primary" ghost :disabled="disabled" @click="showModal = true">
       {{ $t('common.choose') }}
     </n-button>
   </n-input-group>
   <n-modal
-    v-model:show="showModal" preset="card" :title="$t('components.iconSelector.selectorTitle')" size="small" class="w-800px" :bordered="false"
+    v-model:show="showModal"
+    preset="card"
+    :title="$t('components.iconSelector.selectorTitle')"
+    size="small"
+    class="w-800px"
+    :bordered="false"
   >
     <template #header-extra>
       <n-button type="warning" size="small" ghost @click="clearIcon">
@@ -142,13 +148,28 @@ function clearIcon() {
       </n-button>
     </template>
 
-    <n-tabs :value="currentTab" type="line" animated placement="left" @update:value="handleChangeTab">
-      <n-tab-pane v-for="(list, index) in iconList" :key="list.prefix" :name="index" :tab="list.title">
+    <n-tabs
+      :value="currentTab"
+      type="line"
+      animated
+      placement="left"
+      @update:value="handleChangeTab"
+    >
+      <n-tab-pane
+        v-for="(list, index) in iconList"
+        :key="list.prefix"
+        :name="index"
+        :tab="list.title"
+      >
         <n-flex vertical>
           <n-flex size="small">
             <n-tag
-              v-for="(_v, k) in list.categories" :key="k"
-              :checked="currentTag === k" round checkable size="small"
+              v-for="(_v, k) in list.categories"
+              :key="k"
+              :checked="currentTag === k"
+              round
+              checkable
+              size="small"
               @update:checked="handleSelectIconTag(k)"
             >
               {{ k }}
@@ -156,14 +177,17 @@ function clearIcon() {
           </n-flex>
 
           <n-input
-            v-model:value="searchValue" type="text" clearable
+            v-model:value="searchValue"
+            type="text"
+            clearable
             :placeholder="$t('components.iconSelector.searchPlaceholder')"
           />
 
           <div>
             <n-flex :size="2">
               <n-el
-                v-for="(icon) in visibleIcons" :key="icon"
+                v-for="icon in visibleIcons"
+                :key="icon"
                 class="hover:(text-[var(--primary-color)] ring-1) ring-[var(--primary-color)] p-1 rounded flex-center"
                 :title="`${list.prefix}:${icon}`"
                 @click="handleSelectIcon(`${list.prefix}:${icon}`)"

@@ -56,7 +56,7 @@ export default function createServiceProxyPlugin(options: ServiceProxyPluginOpti
 
   return {
     name: 'vite-auto-proxy',
-    config(config: UserConfig, { command }: { mode: string, command: 'build' | 'serve' }) {
+    config(config: UserConfig, { command }: { mode: string; command: 'build' | 'serve' }) {
       // 只在开发环境（serve命令）时生成代理配置
       const isDev = command === 'serve'
 
@@ -86,12 +86,20 @@ export default function createServiceProxyPlugin(options: ServiceProxyPluginOpti
         return
       }
 
-      console.warn(`[auto-proxy] 已加载${devEnvName}模式 ${Object.keys(serviceConfig[devEnvName]).length} 个服务地址`)
+      console.warn(
+        `[auto-proxy] 已加载${devEnvName}模式 ${Object.keys(serviceConfig[devEnvName]).length} 个服务地址`,
+      )
 
-      const { proxyConfig, proxyMapping } = generateProxyFromServiceConfig(serviceConfig, devEnvName, proxyPrefix)
+      const { proxyConfig, proxyMapping } = generateProxyFromServiceConfig(
+        serviceConfig,
+        devEnvName,
+        proxyPrefix,
+      )
 
       Object.entries(proxyMapping).forEach(([serviceName, proxyItem]) => {
-        console.warn(`[auto-proxy] 服务: ${serviceName} | 代理地址: ${proxyItem.path} | 实际地址: ${proxyItem.rawPath}`)
+        console.warn(
+          `[auto-proxy] 服务: ${serviceName} | 代理地址: ${proxyItem.path} | 实际地址: ${proxyItem.rawPath}`,
+        )
       })
 
       if (proxyConfig && Object.keys(proxyConfig).length > 0) {
@@ -112,8 +120,7 @@ export default function createServiceProxyPlugin(options: ServiceProxyPluginOpti
         if (dts) {
           generateDtsFile(proxyMapping, dts, envName)
         }
-      }
-      else {
+      } else {
         console.warn(`[auto-proxy] 未生成任何代理配置`)
         config.define[envName] = JSON.stringify({})
 
@@ -130,7 +137,7 @@ function generateProxyFromServiceConfig(
   serviceConfig: FullServiceConfig,
   mode: ServiceEnvType,
   proxyPrefix: string,
-): { proxyConfig: Record<string, ProxyOptions>, proxyMapping: ProxyMapping } {
+): { proxyConfig: Record<string, ProxyOptions>; proxyMapping: ProxyMapping } {
   try {
     // 获取当前环境的配置
     const envConfig = serviceConfig[mode]
@@ -145,8 +152,7 @@ function generateProxyFromServiceConfig(
     }
 
     return generateProxyFromConfig(envConfig, proxyPrefix)
-  }
-  catch (error) {
+  } catch (error) {
     console.error(`[auto-proxy] 生成代理配置失败:`, (error as Error).message)
     return { proxyConfig: {}, proxyMapping: {} }
   }
@@ -155,7 +161,7 @@ function generateProxyFromServiceConfig(
 function generateProxyFromConfig(
   envConfig: ServiceConfig,
   proxyPrefix: string,
-): { proxyConfig: Record<string, ProxyOptions>, proxyMapping: ProxyMapping } {
+): { proxyConfig: Record<string, ProxyOptions>; proxyMapping: ProxyMapping } {
   const proxyConfig: Record<string, ProxyOptions> = {}
   const proxyMapping: ProxyMapping = {}
 
@@ -169,7 +175,8 @@ function generateProxyFromConfig(
         target: serviceUrl,
         changeOrigin: true,
         ws: isWs,
-        rewrite: (path: string): string => path.replace(new RegExp(`^/${proxyPrefix}${serviceName}`), ''),
+        rewrite: (path: string): string =>
+          path.replace(new RegExp(`^/${proxyPrefix}${serviceName}`), ''),
       }
 
       // 生成代理映射
@@ -183,13 +190,11 @@ function generateProxyFromConfig(
   return { proxyConfig, proxyMapping }
 }
 
-function generateDtsFile(
-  mapping: ProxyMapping,
-  outputPath: string,
-  envName: string,
-) {
+function generateDtsFile(mapping: ProxyMapping, outputPath: string, envName: string) {
   try {
-    const serviceNames = Object.keys(mapping).map(name => `'${name}'`).join(' | ')
+    const serviceNames = Object.keys(mapping)
+      .map(name => `'${name}'`)
+      .join(' | ')
     const serviceNameType = serviceNames || 'never'
 
     const dtsContent = `/* eslint-disable */
@@ -217,8 +222,7 @@ declare global {
       mkdirSync(dir, { recursive: true })
     }
     writeFileSync(outputPath, dtsContent, 'utf-8')
-  }
-  catch (error) {
+  } catch (error) {
     console.error(`[auto-proxy] 生成 d.ts 文件失败:`, (error as Error).message)
   }
 }

@@ -3,9 +3,7 @@ interface Props {
   showWatermark: boolean
   text?: string
 }
-const {
-  text = 'Watermark',
-} = defineProps<Props>()
+const { text = 'Watermark' } = defineProps<Props>()
 </script>
 
 <template>

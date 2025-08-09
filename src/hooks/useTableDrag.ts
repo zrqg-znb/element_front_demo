@@ -13,7 +13,7 @@ export function useTableDrag<T = unknown>(params: {
     immediate: false,
     animation: 150,
     handle: '.drag-handle',
-    onEnd: (event) => {
+    onEnd: event => {
       const { oldIndex, newIndex } = event
       const start = Math.min(oldIndex!, newIndex!)
       const end = Math.max(oldIndex!, newIndex!) - start + 1
@@ -29,7 +29,10 @@ export function useTableDrag<T = unknown>(params: {
     }
   })
 
-  watchOnce(() => tableBodyRef.value, (el) => {
-    el && start()
-  })
+  watchOnce(
+    () => tableBodyRef.value,
+    el => {
+      el && start()
+    },
+  )
 }

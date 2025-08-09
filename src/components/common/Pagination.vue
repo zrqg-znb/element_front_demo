@@ -2,9 +2,7 @@
 interface Props {
   count?: number
 }
-const {
-  count = 0,
-} = defineProps<Props>()
+const { count = 0 } = defineProps<Props>()
 
 const emit = defineEmits<{
   change: [page: number, pageSize: number] // 具名元组语法

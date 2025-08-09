@@ -46,7 +46,7 @@ export function setupRouterGuard(router: Router) {
       await routeStore.initAuthRoute()
       // 动态路由加载完回到根路由
       if (to.name === '404') {
-      // 等待权限路由加载好了，回到之前的路由,否则404
+        // 等待权限路由加载好了，回到之前的路由,否则404
         next({
           path: to.fullPath,
           replace: true,
@@ -65,7 +65,7 @@ export function setupRouterGuard(router: Router) {
 
     next()
   })
-  router.beforeResolve((to) => {
+  router.beforeResolve(to => {
     // 设置菜单高亮
     routeStore.setActiveMenu(to.meta.activeMenu ?? to.fullPath)
     // 添加tabs
@@ -74,7 +74,7 @@ export function setupRouterGuard(router: Router) {
     tabStore.setCurrentTab(to.fullPath as string)
   })
 
-  router.afterEach((to) => {
+  router.afterEach(to => {
     // 修改网页标题
     document.title = `${to.meta.title} - ${title}`
     // 结束 loadingBar

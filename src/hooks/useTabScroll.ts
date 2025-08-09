@@ -15,8 +15,12 @@ export function useTabScroll(currentTabPath: Ref<string>) {
 
   const scrollToCurrentTab = () => {
     nextTick(() => {
-      const currentTabElement = document.querySelector(`[data-tab-path="${currentTabPath.value}"]`) as HTMLElement
-      const tabBarScrollWrapper = document.querySelector('.tab-bar-scroller-wrapper .n-scrollbar-container')
+      const currentTabElement = document.querySelector(
+        `[data-tab-path="${currentTabPath.value}"]`,
+      ) as HTMLElement
+      const tabBarScrollWrapper = document.querySelector(
+        '.tab-bar-scroller-wrapper .n-scrollbar-container',
+      )
       const tabBarScrollContent = document.querySelector('.tab-bar-scroller-content')
 
       if (currentTabElement && tabBarScrollContent && tabBarScrollWrapper) {
@@ -24,12 +28,13 @@ export function useTabScroll(currentTabPath: Ref<string>) {
         const tabBarLeft = tabBarScrollWrapper.scrollLeft
         const wrapperWidth = tabBarScrollWrapper.getBoundingClientRect().width
         const tabWidth = currentTabElement.getBoundingClientRect().width
-        const containerPR = Number.parseFloat(window.getComputedStyle(tabBarScrollContent).paddingRight)
+        const containerPR = Number.parseFloat(
+          window.getComputedStyle(tabBarScrollContent).paddingRight,
+        )
 
         if (tabLeft + tabWidth + safeArea.value + containerPR > wrapperWidth + tabBarLeft) {
           handleTabSwitch(tabLeft + tabWidth + containerPR - wrapperWidth + safeArea.value)
-        }
-        else if (tabLeft - safeArea.value < tabBarLeft) {
+        } else if (tabLeft - safeArea.value < tabBarLeft) {
           handleTabSwitch(tabLeft - safeArea.value)
         }
       }

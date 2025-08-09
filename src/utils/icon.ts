@@ -2,15 +2,13 @@ import { Icon } from '@iconify/vue'
 import { NIcon } from 'naive-ui'
 
 export function renderIcon(icon?: string, props?: import('naive-ui').IconProps) {
-  if (!icon)
-    return
+  if (!icon) return
 
   return () => createIcon(icon, props)
 }
 
 export function createIcon(icon?: string, props?: import('naive-ui').IconProps) {
-  if (!icon)
-    return
+  if (!icon) return
 
   const isLocal = icon.startsWith('local:')
   let innerIcon: any
@@ -23,8 +21,7 @@ export function createIcon(icon?: string, props?: import('naive-ui').IconProps) 
     })
     const target = svg[`/src/assets/svg-icons/${svgName}.svg`]
     innerIcon = h(NIcon, { ...props, innerHTML: target })
-  }
-  else {
+  } else {
     innerIcon = h(NIcon, props, { default: () => h(Icon, { icon }) })
   }
 

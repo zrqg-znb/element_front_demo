@@ -24,8 +24,7 @@ const text1Ref = ref<HTMLSpanElement>()
 const text2Ref = ref<HTMLSpanElement>()
 
 function setStyles(fraction: number) {
-  if (!text1Ref.value || !text2Ref.value)
-    return
+  if (!text1Ref.value || !text2Ref.value) return
 
   text2Ref.value.style.filter = `blur(${Math.min(8 / fraction - 8, 100)}px)`
   text2Ref.value.style.opacity = `${fraction ** 0.4 * 100}%`
@@ -79,8 +78,7 @@ function animate() {
 
   if (coolDown.value <= 0) {
     doMorph()
-  }
-  else {
+  } else {
     doCoolDown()
   }
 }
@@ -103,20 +101,10 @@ onUnmounted(() => {
       )
     "
   >
-    <span
-      ref="text1Ref"
-      :class="cn(TEXT_CLASSES)"
-    />
-    <span
-      ref="text2Ref"
-      :class="cn(TEXT_CLASSES)"
-    />
+    <span ref="text1Ref" :class="cn(TEXT_CLASSES)" />
+    <span ref="text2Ref" :class="cn(TEXT_CLASSES)" />
 
-    <svg
-      id="filters"
-      class="fixed size-0"
-      preserveAspectRatio="xMidYMid slice"
-    >
+    <svg id="filters" class="fixed size-0" preserveAspectRatio="xMidYMid slice">
       <defs>
         <filter id="threshold">
           <feColorMatrix

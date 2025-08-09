@@ -1,10 +1,7 @@
 import { fetchUpdateToken } from '@/service'
 import { useAuthStore } from '@/store'
-import { getCookie, setCookie } from '@/utils/cookie'
-import {
-  ERROR_NO_TIP_STATUS,
-  ERROR_STATUS,
-} from './config'
+import { local } from '@/utils'
+import { ERROR_NO_TIP_STATUS, ERROR_STATUS } from './config'
 
 type ErrorStatus = keyof typeof ERROR_STATUS
 
@@ -35,12 +32,15 @@ export function handleResponseError(response: Response) {
  * @param {Service} config 后台字段配置
  * @return {*}
  */
-export function handleBusinessError(data: Record<string, any>, config: Required<Service.BackendConfig>) {
+export function handleBusinessError(
+  data: Record<string, any>,
+  config: Required<Service.BackendConfig>,
+) {
   const { codeKey, msgKey } = config
   const error: Service.RequestError = {
     errorType: 'Business Error',
     code: data[codeKey],
-    message: data[msgKey],
+    message: data[msgKey] || data.message,
     data: data.data,
   }
 
@@ -77,10 +77,10 @@ export async function handleRefreshToken() {
   }
 
   // 刷新token
-  const { data } = await fetchUpdateToken({ refreshToken: getCookie('refreshToken') })
+  const { data } = await fetchUpdateToken({ refreshToken: local.get('refreshToken') })
   if (data) {
-    setCookie('accessToken', data.accessToken, 7)
-    setCookie('refreshToken', data.refreshToken, 7)
+    local.set('accessToken', data.accessToken)
+    local.set('refreshToken', data.refreshToken)
   }
   else {
     // 刷新失败，退出
@@ -91,8 +91,9 @@ export async function handleRefreshToken() {
 export function showError(error: Service.RequestError) {
   // 如果error不需要提示,则跳过
   const code = Number(error.code)
-  if (ERROR_NO_TIP_STATUS.includes(code))
+  if (ERROR_NO_TIP_STATUS.includes(code)) {
     return
+  }
 
   window.$message.error(error.message)
 }

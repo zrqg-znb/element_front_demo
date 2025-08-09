@@ -13,7 +13,7 @@ interface Emits {
 <template>
   <n-scrollbar style="height: 400px">
     <n-list hoverable clickable>
-      <n-list-item v-for="(item) in list" :key="item.id" @click="emit('read', item.id)">
+      <n-list-item v-for="item in list" :key="item.id" @click="emit('read', item.id)">
         <n-thing content-indented :class="{ 'opacity-30': item.isRead }">
           <template #header>
             <n-ellipsis :line-clamp="1">

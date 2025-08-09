@@ -4,7 +4,13 @@ import { colord } from 'colord'
 import { set } from 'radash'
 import themeConfig from './theme.json'
 
-export type TransitionAnimation = '' | 'fade-slide' | 'fade-bottom' | 'fade-scale' | 'zoom-fade' | 'zoom-out'
+export type TransitionAnimation =
+  | ''
+  | 'fade-slide'
+  | 'fade-bottom'
+  | 'fade-scale'
+  | 'zoom-fade'
+  | 'zoom-out'
 export type LayoutMode = 'topMenu' | 'mixMenu' | 'leftMenu'
 
 const { VITE_DEFAULT_LANG, VITE_COPYRIGHT_INFO } = import.meta.env
@@ -111,8 +117,7 @@ export const useAppStore = defineStore('app-store', {
         setTimeout(() => {
           this.loadFlag = true
         }, delay)
-      }
-      else {
+      } else {
         this.loadFlag = true
       }
     },

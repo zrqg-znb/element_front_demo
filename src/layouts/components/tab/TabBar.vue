@@ -114,11 +114,20 @@ useDraggable(el, tabs, {
 </script>
 
 <template>
-  <n-scrollbar ref="scrollbar" class="relative flex h-full tab-bar-scroller-wrapper" content-class="pr-34 tab-bar-scroller-content" :x-scrollable="true" @wheel="onWheel">
+  <n-scrollbar
+    ref="scrollbar"
+    class="relative flex h-full tab-bar-scroller-wrapper"
+    content-class="pr-34 tab-bar-scroller-content"
+    :x-scrollable="true"
+    @wheel="onWheel"
+  >
     <div class="p-l-2 flex wh-full relative">
       <div class="flex items-end">
         <TabBarItem
-          v-for="item in tabStore.pinTabs" :key="item.fullPath" :value="tabStore.currentTabPath" :route="item"
+          v-for="item in tabStore.pinTabs"
+          :key="item.fullPath"
+          :value="tabStore.currentTabPath"
+          :route="item"
           @click="handleTab(item)"
         />
       </div>
@@ -135,8 +144,14 @@ useDraggable(el, tabs, {
           @contextmenu="handleContextMenu($event, item)"
         />
         <n-dropdown
-          placement="bottom-start" trigger="manual" :x="x" :y="y" :options="options" :show="showDropdown"
-          :on-clickoutside="onClickoutside" @select="handleSelect"
+          placement="bottom-start"
+          trigger="manual"
+          :x="x"
+          :y="y"
+          :options="options"
+          :show="showDropdown"
+          :on-clickoutside="onClickoutside"
+          @select="handleSelect"
         />
       </div>
     </div>
