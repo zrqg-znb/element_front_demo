@@ -27,14 +27,19 @@
       </template>
 
       <template #tableHeader>
-        <div>
+        <div class="flex">
           <NButton type="primary" @click="handleAdd">
             <template #icon>
-              <NIcon><AddOutline /></NIcon>
+              <NovaIcon icon="icon-park-outline:add"></NovaIcon>
             </template>
             新增车型
           </NButton>
-          <NButton v-if="checkedRowKeys.length > 0" ml-10 type="error" @click="handleBatchDelete">
+          <NButton
+            v-if="checkedRowKeys.length > 0"
+            class="ml-20px"
+            type="error"
+            @click="handleBatchDelete"
+          >
             批量删除
           </NButton>
         </div>
@@ -59,7 +64,7 @@
       >
         <n-form-item label="项目空间" path="project_space">
           <n-select
-            v-model:value="formData.project_id"
+            v-model:value="formData.project_space"
             placeholder="请选择项目空间"
             filterable
             :options="projectOptions"
@@ -187,7 +192,7 @@ const editId = ref('')
 // 表单相关
 const formRef = ref()
 const formData = reactive({
-  project_id: '',
+  project_space: '',
   name: '',
   code: '',
   module: '',
@@ -195,7 +200,7 @@ const formData = reactive({
 })
 
 const rules = {
-  project_id: [{ required: true, message: '请选择项目空间', trigger: 'change' }],
+  project_space: [{ required: true, message: '请选择项目空间', trigger: 'change' }],
   name: [{ required: true, message: '请输入车型名称', trigger: 'blur' }],
   code: [{ required: true, message: '请输入车型编码', trigger: 'blur' }],
   module: [{ required: true, message: '请输入车型模块', trigger: 'blur' }],
@@ -239,7 +244,7 @@ function handleEdit(row) {
   modalTitle.value = '编辑车型'
   editId.value = row.id
   Object.assign(formData, {
-    project_id: row.project_space,
+    project_space: row.project_space,
     name: row.name,
     code: row.code,
     module: row.module,
