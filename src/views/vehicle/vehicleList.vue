@@ -1,100 +1,10 @@
-<template>
-  <div>
-    <CrudTable
-      ref="tableRef"
-      v-model:query-items="queryItems"
-      :columns="columns"
-      :get-data="vehicleApi.getVehicleList"
-      @on-checked="handleChecked"
-    >
-      <template #queryBar>
-        <QueryBarItem label="项目空间">
-          <n-select
-            v-model:value="queryItems.project_id"
-            placeholder="请选择项目空间"
-            clearable
-            filterable
-            :options="projectOptions"
-            :loading="projectLoading"
-          />
-        </QueryBarItem>
-        <QueryBarItem label="车型名称">
-          <n-input v-model:value="queryItems.name" placeholder="请输入车型名称" clearable />
-        </QueryBarItem>
-        <QueryBarItem label="车型编码">
-          <n-input v-model:value="queryItems.code" placeholder="请输入车型编码" clearable />
-        </QueryBarItem>
-      </template>
-
-      <template #tableHeader>
-        <div>
-          <NButton type="primary" @click="handleAdd">
-            <template #icon>
-              <NIcon><AddOutline /></NIcon>
-            </template>
-            新增车型
-          </NButton>
-          <NButton v-if="checkedRowKeys.length > 0" ml-10 type="error" @click="handleBatchDelete">
-            批量删除
-          </NButton>
-        </div>
-      </template>
-    </CrudTable>
-
-    <!-- 新增/编辑弹窗 -->
-    <CrudModal
-      v-model:visible="modalVisible"
-      :title="modalTitle"
-      :loading="modalLoading"
-      width="700px"
-      @save="handleSave"
-      @cancel="handleCancel"
-    >
-      <n-form
-        ref="formRef"
-        :model="formData"
-        :rules="rules"
-        label-placement="left"
-        label-width="100px"
-      >
-        <n-form-item label="项目空间" path="project_space">
-          <n-select
-            v-model:value="formData.project_id"
-            placeholder="请选择项目空间"
-            filterable
-            :options="projectOptions"
-            :loading="projectLoading"
-          />
-        </n-form-item>
-        <n-form-item label="车型名称" path="name">
-          <n-input v-model:value="formData.name" placeholder="请输入车型名称" />
-        </n-form-item>
-        <n-form-item label="车型编码" path="code">
-          <n-input v-model:value="formData.code" placeholder="请输入车型编码" />
-        </n-form-item>
-        <n-form-item label="车型模块" path="module">
-          <n-input v-model:value="formData.module" placeholder="请输入车型模块" />
-        </n-form-item>
-        <n-form-item label="车型描述" path="description">
-          <n-input
-            v-model:value="formData.description"
-            type="textarea"
-            placeholder="请输入车型描述"
-            :autosize="{ minRows: 3, maxRows: 6 }"
-          />
-        </n-form-item>
-      </n-form>
-    </CrudModal>
-  </div>
-</template>
-
 <script setup>
-import { ref, reactive, h, onMounted } from 'vue'
-import { NButton, NTag, NPopconfirm, NIcon } from 'naive-ui'
+import { reactive, ref, h, onMounted } from 'vue'
+import { NButton, NIcon, NInput, NPopconfirm, NSelect, NTag, NForm, NFormItem } from 'naive-ui'
 import CrudTable from '@/components/table/CrudTable.vue'
 import CrudModal from '@/components/table/CrudModal.vue'
 import QueryBarItem from '@/components/query-bar/QueryBarItem.vue'
-import { vehicleApi, projectApi } from '@/service'
+import { projectApi, vehicleApi } from '@/service'
 import { formatDateTime } from '@/utils'
 import NovaIcon from '@/components/common/NovaIcon.vue'
 
@@ -119,7 +29,21 @@ const columns = [
   { title: '项目空间', key: 'project_space_name', width: 150 },
   { title: '车型名称', key: 'name', width: 150 },
   { title: '车型编码', key: 'code', width: 120 },
-  { title: '车型模块', key: 'module', width: 120 },
+  {
+    title: '管道配置',
+    key: 'pipelines',
+    width: 150,
+    render(row) {
+      if (!row.pipelines || row.pipelines.length === 0) {
+        return '无配置'
+      }
+      return h(
+        NTag,
+        { type: 'info', bordered: false },
+        { default: () => `${row.pipelines.length}个管道` },
+      )
+    },
+  },
   { title: '车型描述', key: 'description', width: 200, ellipsis: { tooltip: true } },
   {
     title: '创建时间',
@@ -187,18 +111,17 @@ const editId = ref('')
 // 表单相关
 const formRef = ref()
 const formData = reactive({
-  project_id: '',
+  project_space: '',
   name: '',
   code: '',
-  module: '',
   description: '',
+  pipelines: [],
 })
 
 const rules = {
-  project_id: [{ required: true, message: '请选择项目空间', trigger: 'change' }],
+  project_space: [{ required: true, message: '请选择项目空间', trigger: 'change' }],
   name: [{ required: true, message: '请输入车型名称', trigger: 'blur' }],
   code: [{ required: true, message: '请输入车型编码', trigger: 'blur' }],
-  module: [{ required: true, message: '请输入车型模块', trigger: 'blur' }],
 }
 
 // 加载项目选项
@@ -238,12 +161,25 @@ function handleEdit(row) {
   isEdit.value = true
   modalTitle.value = '编辑车型'
   editId.value = row.id
+
+  // 处理管道数据格式
+  const formattedPipelines = []
+  if (row.pipelines && row.pipelines.length > 0) {
+    row.pipelines.forEach(pipeline => {
+      const pipelineName = Object.keys(pipeline)[0]
+      formattedPipelines.push({
+        name: pipelineName,
+        value: pipeline[pipelineName],
+      })
+    })
+  }
+
   Object.assign(formData, {
-    project_id: row.project_space,
+    project_space: row.project_space,
     name: row.name,
     code: row.code,
-    module: row.module,
     description: row.description || '',
+    pipelines: formattedPipelines,
   })
   modalVisible.value = true
 }
@@ -285,9 +221,13 @@ async function handleSave() {
     await formRef.value?.validate()
     modalLoading.value = true
 
+    // 格式化管道数据
+    const submitData = { ...formData }
+    submitData.pipelines = formatPipelinesForSubmit()
+
     const response = isEdit.value
-      ? await vehicleApi.updateVehicle(editId.value, formData)
-      : await vehicleApi.createVehicle(formData)
+      ? await vehicleApi.updateVehicle(editId.value, submitData)
+      : await vehicleApi.createVehicle(submitData)
 
     if (response.success) {
       window.$message?.success(isEdit.value ? '更新成功' : '创建成功')
@@ -309,13 +249,37 @@ function handleCancel() {
 // 重置表单
 function resetForm() {
   Object.assign(formData, {
-    project_id: '',
+    project_space: '',
     name: '',
     code: '',
-    module: '',
     description: '',
+    pipelines: [],
   })
   formRef.value?.restoreValidation()
+}
+
+// 添加管道
+function addPipeline() {
+  formData.pipelines.push({
+    name: '',
+    value: '',
+  })
+}
+
+// 移除管道
+function removePipeline(index) {
+  formData.pipelines.splice(index, 1)
+}
+
+// 格式化管道数据为后端需要的格式
+function formatPipelinesForSubmit() {
+  return formData.pipelines
+    .filter(p => p.name && p.value) // 过滤掉空的管道
+    .map(p => {
+      const pipelineObj = {}
+      pipelineObj[p.name] = p.value
+      return pipelineObj
+    })
 }
 
 // 组件挂载时加载项目选项
@@ -323,3 +287,159 @@ onMounted(() => {
   loadProjectOptions()
 })
 </script>
+
+<template>
+  <div>
+    <CrudTable
+      ref="tableRef"
+      v-model:query-items="queryItems"
+      :columns="columns"
+      :get-data="vehicleApi.getVehicleList"
+      @on-checked="handleChecked"
+    >
+      <template #queryBar>
+        <QueryBarItem label="项目空间">
+          <NSelect
+            v-model:value="queryItems.project_id"
+            placeholder="请选择项目空间"
+            clearable
+            filterable
+            :options="projectOptions"
+            :loading="projectLoading"
+          />
+        </QueryBarItem>
+        <QueryBarItem label="车型名称">
+          <NInput v-model:value="queryItems.name" placeholder="请输入车型名称" clearable />
+        </QueryBarItem>
+        <QueryBarItem label="车型编码">
+          <NInput v-model:value="queryItems.code" placeholder="请输入车型编码" clearable />
+        </QueryBarItem>
+      </template>
+
+      <template #tableHeader>
+        <div class="flex">
+          <NButton type="primary" @click="handleAdd">
+            <template #icon>
+              <NovaIcon icon="icon-park-outline:add"></NovaIcon>
+            </template>
+            新增车型
+          </NButton>
+          <NButton
+            v-if="checkedRowKeys.length > 0"
+            class="ml-20px"
+            type="error"
+            @click="handleBatchDelete"
+          >
+            批量删除
+          </NButton>
+        </div>
+      </template>
+    </CrudTable>
+
+    <!-- 新增/编辑弹窗 -->
+    <CrudModal
+      v-model:visible="modalVisible"
+      :title="modalTitle"
+      :loading="modalLoading"
+      width="700px"
+      @save="handleSave"
+      @cancel="handleCancel"
+    >
+      <NForm
+        ref="formRef"
+        :model="formData"
+        :rules="rules"
+        label-placement="left"
+        label-width="100px"
+      >
+        <NFormItem label="项目空间" path="project_space">
+          <NSelect
+            v-model:value="formData.project_space"
+            placeholder="请选择项目空间"
+            filterable
+            :options="projectOptions"
+            :loading="projectLoading"
+          />
+        </NFormItem>
+        <NFormItem label="车型名称" path="name">
+          <NInput v-model:value="formData.name" placeholder="请输入车型名称" />
+        </NFormItem>
+        <NFormItem label="车型编码" path="code">
+          <NInput v-model:value="formData.code" placeholder="请输入车型编码" />
+        </NFormItem>
+        <NFormItem label="管道配置" path="pipelines">
+          <div class="pipeline-container">
+            <div v-for="(pipeline, index) in formData.pipelines" :key="index" class="pipeline-item">
+              <div class="pipeline-header">
+                <NInput
+                  v-model:value="pipeline.name"
+                  placeholder="管道名称"
+                  class="pipeline-name-input"
+                />
+                <NButton quaternary circle size="small" @click="() => removePipeline(index)">
+                  <template #icon>
+                    <NovaIcon icon="icon-park-outline:close" />
+                  </template>
+                </NButton>
+              </div>
+              <NInput
+                v-model:value="pipeline.value"
+                placeholder="管道值，例如: 'MPU','MCU'"
+                class="pipeline-value-input"
+              />
+            </div>
+            <NButton class="add-pipeline-btn" secondary size="small" @click="addPipeline">
+              <template #icon>
+                <NovaIcon icon="icon-park-outline:add" />
+              </template>
+              添加管道
+            </NButton>
+          </div>
+        </NFormItem>
+        <NFormItem label="车型描述" path="description">
+          <NInput
+            v-model:value="formData.description"
+            type="textarea"
+            placeholder="请输入车型描述"
+            :autosize="{ minRows: 3, maxRows: 6 }"
+          />
+        </NFormItem>
+      </NForm>
+    </CrudModal>
+  </div>
+</template>
+
+<style scoped>
+.pipeline-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pipeline-item {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px;
+  background-color: #f9f9f9;
+}
+
+.pipeline-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.pipeline-name-input {
+  flex: 1;
+  margin-right: 8px;
+}
+
+.pipeline-value-input {
+  width: 100%;
+}
+
+.add-pipeline-btn {
+  align-self: flex-start;
+  margin-top: 8px;
+}
+</style>

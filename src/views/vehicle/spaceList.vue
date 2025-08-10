@@ -22,7 +22,7 @@
       </template>
 
       <template #tableHeader>
-        <div>
+        <div class="flex">
           <n-button type="primary" @click="handleAdd">
             <template #icon>
               <nova-icon icon="icon-park-outline:plus" />
