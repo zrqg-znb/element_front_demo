@@ -84,7 +84,7 @@
 
 <script setup>
 import { ref, reactive, h } from 'vue'
-import { NButton, NTag, NPopconfirm, NIcon } from 'naive-ui'
+import { NButton, NTag, NPopconfirm } from 'naive-ui'
 import CrudTable from '@/components/table/CrudTable.vue'
 import CrudModal from '@/components/table/CrudModal.vue'
 import QueryBarItem from '@/components/query-bar/QueryBarItem.vue'
