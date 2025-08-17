@@ -15,7 +15,7 @@ export function install(app: App) {
       return false
     }
 
-    if (permissionWrite.value === 'denied') {
+    if (permissionWrite.value !== 'granted') {
       window.$message.error($t('components.copyText.unpermittedError'))
       return false
     }
@@ -23,7 +23,8 @@ export function install(app: App) {
   }
 
   function copyHandler(this: any) {
-    if (!clipboardEnable()) return
+    if (!clipboardEnable())
+      return
     copy(this._copyText)
     window.$message.success($t('components.copyText.message'))
   }

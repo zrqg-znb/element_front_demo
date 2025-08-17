@@ -5,7 +5,8 @@ export function isNullOrWhitespace(str) {
 
 // 格式化日期时间
 export function formatDateTime(dateTime) {
-  if (!dateTime) return ''
+  if (!dateTime)
+    return ''
   const date = new Date(dateTime)
   return date.toLocaleString('zh-CN', {
     year: 'numeric',
@@ -19,7 +20,8 @@ export function formatDateTime(dateTime) {
 
 // 格式化日期
 export function formatDate(date) {
-  if (!date) return ''
+  if (!date)
+    return ''
   const d = new Date(date)
   return d.toLocaleDateString('zh-CN')
 }

@@ -4,14 +4,8 @@ import { colord } from 'colord'
 import { set } from 'radash'
 import themeConfig from './theme.json'
 
-export type TransitionAnimation =
-  | ''
-  | 'fade-slide'
-  | 'fade-bottom'
-  | 'fade-scale'
-  | 'zoom-fade'
-  | 'zoom-out'
-export type LayoutMode = 'topMenu' | 'mixMenu' | 'leftMenu'
+export type TransitionAnimation = '' | 'fade-slide' | 'fade-bottom' | 'fade-scale' | 'zoom-fade' | 'zoom-out'
+export type LayoutMode = 'leftMenu' | 'topMenu' | 'mixMenu'
 
 const { VITE_DEFAULT_LANG, VITE_COPYRIGHT_INFO } = import.meta.env
 
@@ -30,7 +24,7 @@ export const useAppStore = defineStore('app-store', {
       lang: VITE_DEFAULT_LANG,
       theme: themeConfig as GlobalThemeOverrides,
       primaryColor: themeConfig.common.primaryColor,
-      collapsed: false,
+      collapsed: true,
       grayMode: false,
       colorWeak: false,
       loadFlag: true,
@@ -38,12 +32,12 @@ export const useAppStore = defineStore('app-store', {
       showTabs: false,
       showFooter: true,
       showProgress: true,
-      showBreadcrumb: true,
-      showBreadcrumbIcon: true,
+      showBreadcrumb: false,
+      showBreadcrumbIcon: false,
       showWatermark: false,
       showSetting: false,
       transitionAnimation: 'fade-slide' as TransitionAnimation,
-      layoutMode: 'topMenu' as LayoutMode,
+      layoutMode: 'leftMenu' as LayoutMode,
       contentFullScreen: false,
     }
   },
@@ -62,8 +56,8 @@ export const useAppStore = defineStore('app-store', {
     // 重置所有设置
     resetAlltheme() {
       this.theme = themeConfig
-      this.primaryColor = '#2080f0'
-      this.collapsed = false
+      this.primaryColor = '#2080F0'
+      this.collapsed = true
       this.grayMode = false
       this.colorWeak = false
       this.loadFlag = true
@@ -74,7 +68,7 @@ export const useAppStore = defineStore('app-store', {
       this.showBreadcrumbIcon = false
       this.showWatermark = false
       this.transitionAnimation = 'fade-slide'
-      this.layoutMode = 'topMenu'
+      this.layoutMode = 'mixMenu'
       this.contentFullScreen = false
 
       // 重置所有配色
@@ -117,7 +111,8 @@ export const useAppStore = defineStore('app-store', {
         setTimeout(() => {
           this.loadFlag = true
         }, delay)
-      } else {
+      }
+      else {
         this.loadFlag = true
       }
     },

@@ -30,24 +30,17 @@ const options = computed(() => {
 })
 
 function renderLabel(option: any) {
-  return h(
-    NFlex,
-    { align: 'center' },
-    {
-      default: () => [h(option.icon), option.label],
-    },
-  )
+  return h(NFlex, { align: 'center' }, {
+    default: () => [
+      h(option.icon),
+      option.label,
+    ],
+  })
 }
 </script>
 
 <template>
-  <n-popselect
-    :value="appStore.storeColorMode"
-    :render-label="renderLabel"
-    :options="options"
-    trigger="click"
-    @update:value="appStore.setColorMode"
-  >
+  <n-popselect :value="appStore.storeColorMode" :render-label="renderLabel" :options="options" trigger="click" @update:value="appStore.setColorMode">
     <CommonWrapper>
       <icon-park-outline-moon v-if="appStore.storeColorMode === 'dark'" />
       <icon-park-outline-sun-one v-if="appStore.storeColorMode === 'light'" />

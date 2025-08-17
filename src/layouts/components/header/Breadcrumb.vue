@@ -10,17 +10,14 @@ const appStore = useAppStore()
 </script>
 
 <template>
-  <TransitionGroup
-    v-if="appStore.showBreadcrumb"
-    name="list"
-    tag="ul"
-    style="display: flex; gap: 1em"
-  >
+  <TransitionGroup v-if="appStore.showBreadcrumb" name="list" tag="ul" style="display: flex; gap:1em;">
     <n-el
-      v-for="item in routes"
+      v-for="(item) in routes"
       :key="item.path"
-      tag="li"
-      style="color: var(--text-color-2); transition: 0.3s var(--cubic-bezier-ease-in-out)"
+      tag="li" style="
+            color: var(--text-color-2);
+            transition: 0.3s var(--cubic-bezier-ease-in-out);
+          "
       class="flex-center gap-2 cursor-pointer split"
       @click="router.push(item.path)"
     >
@@ -32,8 +29,8 @@ const appStore = useAppStore()
 
 <style lang="scss">
 .split:not(:first-child)::before {
-  content: '/';
-  padding-right: 0.6em;
+   content: '/';
+   padding-right:0.6em;
 }
 
 .list-move,
@@ -42,8 +39,7 @@ const appStore = useAppStore()
   transition: all 0.3s ease;
 }
 
-.list-enter-from,
-.list-leave-to {
+.list-enter-from,.list-leave-to {
   opacity: 0;
   transform: translateX(-30px);
 }

@@ -9,10 +9,9 @@ import Icons from 'unplugin-icons/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import viteCompression from 'vite-plugin-compression'
+
 import VueDevTools from 'vite-plugin-vue-devtools'
-import AutoProxy from './autoProxy'
-import { vitePrettier } from './vite-plugin-prettier'
-import { serviceConfig } from '../service.config'
+
 /**
  * @description: 设置vite插件配置
  * @param {*} env - 环境变量配置
@@ -28,9 +27,6 @@ export function createVitePlugins(env: ImportMetaEnv) {
     // support unocss
     UnoCSS(),
 
-    // support prettier
-    vitePrettier(),
-
     // auto import api of lib
     AutoImport({
       imports: [
@@ -40,10 +36,21 @@ export function createVitePlugins(env: ImportMetaEnv) {
         '@vueuse/core',
         'vue-i18n',
         {
-          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar', 'useModal'],
+          'naive-ui': [
+            'useDialog',
+            'useMessage',
+            'useNotification',
+            'useLoadingBar',
+            'useModal',
+          ],
         },
       ],
-      include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
+      include: [
+        /\.[tj]sx?$/,
+        /\.vue$/,
+        /\.vue\?vue/,
+        /\.md$/,
+      ],
       dts: 'src/typings/auto-imports.d.ts',
     }),
 
@@ -53,7 +60,9 @@ export function createVitePlugins(env: ImportMetaEnv) {
       resolvers: [
         IconsResolver({
           prefix: false,
-          customCollections: ['svg-icons'],
+          customCollections: [
+            'svg-icons',
+          ],
         }),
         NaiveUiResolver(),
       ],
@@ -64,27 +73,19 @@ export function createVitePlugins(env: ImportMetaEnv) {
       defaultStyle: 'display:inline-block',
       compiler: 'vue3',
       customCollections: {
-        'svg-icons': FileSystemIconLoader('src/assets/svg-icons', svg =>
-          svg.replace(/^<svg /, '<svg fill="currentColor" width="1.2em" height="1.2em"'),
+        'svg-icons': FileSystemIconLoader(
+          'src/assets/svg-icons',
+          svg => svg.replace(/^<svg /, '<svg fill="currentColor" width="1.2em" height="1.2em"'),
         ),
       },
-    }),
-
-    AutoProxy({
-      enableProxy: env.VITE_HTTP_PROXY === 'Y',
-      serviceConfig,
-      devEnvName: 'dev',
-      dts: 'src/typings/auto-proxy.d.ts',
     }),
   ]
   // use compression
   if (env.VITE_BUILD_COMPRESS === 'Y') {
     const { VITE_COMPRESS_TYPE = 'gzip' } = env
-    plugins.push(
-      viteCompression({
-        algorithm: VITE_COMPRESS_TYPE, // 压缩算法
-      }),
-    )
+    plugins.push(viteCompression({
+      algorithm: VITE_COMPRESS_TYPE, // 压缩算法
+    }))
   }
 
   return plugins

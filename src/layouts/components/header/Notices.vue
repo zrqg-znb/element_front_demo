@@ -36,12 +36,12 @@ const MassageData = ref<Entity.Message[]>([
     id: 3,
     type: 0,
     title:
-      'Admin 已经添加菜单导航功能！Admin 已经添加菜单导航功能！Admin 已经添加菜单导航功能！Admin 已经添加菜单导航功能！',
+          'Admin 已经添加菜单导航功能！Admin 已经添加菜单导航功能！Admin 已经添加菜单导航功能！Admin 已经添加菜单导航功能！',
     icon: 'icon-park-outline:tips-one',
     tagTitle: '未开始',
     tagType: 'error',
     description:
-      '项目稳定推进中...项目稳定推进中...项目稳定推进中...项目稳定推进中...项目稳定推进中...项目稳定推进中...项目稳定推进中...',
+          '项目稳定推进中...项目稳定推进中...项目稳定推进中...项目稳定推进中...项目稳定推进中...项目稳定推进中...项目稳定推进中...',
     date: '2022-2-5 18:32',
   },
   {
@@ -82,7 +82,8 @@ const MassageData = ref<Entity.Message[]>([
 const currentTab = ref(0)
 function handleRead(id: number) {
   const data = MassageData.value.find(i => i.id === id)
-  if (data) data.isRead = true
+  if (data)
+    data.isRead = true
   window.$message.success(`id: ${id}`)
 }
 const massageCount = computed(() => {
@@ -107,22 +108,12 @@ const groupMessage = computed(() => {
         <span>{{ $t('app.notificationsTips') }}</span>
       </n-tooltip>
     </template>
-    <n-tabs
-      v-model:value="currentTab"
-      type="line"
-      animated
-      justify-content="space-evenly"
-      class="w-390px"
-    >
+    <n-tabs v-model:value="currentTab" type="line" animated justify-content="space-evenly" class="w-390px">
       <n-tab-pane :name="0">
         <template #tab>
           <n-space class="w-130px" justify="center">
             {{ $t('app.notifications') }}
-            <n-badge
-              type="info"
-              :value="groupMessage[0]?.filter(i => !i.isRead).length"
-              :max="99"
-            />
+            <n-badge type="info" :value="groupMessage[0]?.filter(i => !i.isRead).length" :max="99" />
           </n-space>
         </template>
         <NoticeList :list="groupMessage[0]" @read="handleRead" />
@@ -131,11 +122,7 @@ const groupMessage = computed(() => {
         <template #tab>
           <n-space class="w-130px" justify="center">
             {{ $t('app.messages') }}
-            <n-badge
-              type="warning"
-              :value="groupMessage[1]?.filter(i => !i.isRead).length"
-              :max="99"
-            />
+            <n-badge type="warning" :value="groupMessage[1]?.filter(i => !i.isRead).length" :max="99" />
           </n-space>
         </template>
         <NoticeList :list="groupMessage[1]" @read="handleRead" />
@@ -144,11 +131,7 @@ const groupMessage = computed(() => {
         <template #tab>
           <n-space class="w-130px" justify="center">
             {{ $t('app.todos') }}
-            <n-badge
-              type="error"
-              :value="groupMessage[2]?.filter(i => !i.isRead).length"
-              :max="99"
-            />
+            <n-badge type="error" :value="groupMessage[2]?.filter(i => !i.isRead).length" :max="99" />
           </n-space>
         </template>
         <NoticeList :list="groupMessage[2]" @read="handleRead" />

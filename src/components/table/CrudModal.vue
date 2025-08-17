@@ -1,25 +1,3 @@
-<template>
-  <n-modal
-    v-model:show="show"
-    :style="{ width }"
-    preset="card"
-    :title="title"
-    size="huge"
-    :bordered="false"
-    :mask-closable="false"
-  >
-    <slot />
-    <template v-if="showFooter" #footer>
-      <footer flex justify-end>
-        <slot name="footer">
-          <n-button @click="handleCancel">取消</n-button>
-          <n-button :loading="loading" ml-20px type="primary" @click="handleSave">保存</n-button>
-        </slot>
-      </footer>
-    </template>
-  </n-modal>
-</template>
-
 <script setup>
 import { computed } from 'vue'
 
@@ -66,3 +44,29 @@ function handleCancel() {
   show.value = false
 }
 </script>
+
+<template>
+  <n-modal
+    v-model:show="show"
+    :style="{ width }"
+    preset="card"
+    :title="title"
+    size="huge"
+    :bordered="false"
+    :mask-closable="false"
+  >
+    <slot />
+    <template v-if="showFooter" #footer>
+      <footer flex justify-end>
+        <slot name="footer">
+          <n-button @click="handleCancel">
+            取消
+          </n-button>
+          <n-button :loading="loading" ml-20px type="primary" @click="handleSave">
+            保存
+          </n-button>
+        </slot>
+      </footer>
+    </template>
+  </n-modal>
+</template>

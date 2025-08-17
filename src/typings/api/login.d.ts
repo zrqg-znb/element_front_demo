@@ -7,10 +7,10 @@ namespace Api {
       /** 用户id */
       id: number
       /** 用户角色类型 */
-      role: Entity.RoleType[]
-      /** 访问token */
+      role: Entity.RoleType
+      /** 访问toekn */
       accessToken: string
-      /** 访问token */
+      /** 刷新toekn */
       refreshToken: string
     }
   }

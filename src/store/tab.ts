@@ -20,14 +20,18 @@ export const useTabStore = defineStore('tab-store', {
   actions: {
     addTab(route: RouteLocationNormalized) {
       // 根据meta确定是否不添加，可用于错误页,登录页等
-      if (route.meta.withoutTab) return
+      if (route.meta.withoutTab)
+        return
 
       // 如果标签名称已存在则不添加
-      if (this.hasExistTab(route.fullPath as string)) return
+      if (this.hasExistTab(route.fullPath as string))
+        return
 
       // 根据meta.pinTab传递到不同的分组中
-      if (route.meta.pinTab) this.pinTabs.push(route)
-      else this.tabs.push(route)
+      if (route.meta.pinTab)
+        this.pinTabs.push(route)
+      else
+        this.tabs.push(route)
     },
     async closeTab(fullPath: string) {
       const tabsLength = this.tabs.length
@@ -40,17 +44,19 @@ export const useTabStore = defineStore('tab-store', {
         if (this.currentTabPath === fullPath && !isLast) {
           // 跳转到后一个标签
           router.push(this.tabs[index + 1].fullPath)
-        } else if (this.currentTabPath === fullPath && isLast) {
+        }
+        else if (this.currentTabPath === fullPath && isLast) {
           // 已经是最后一个了，就跳转前一个
           router.push(this.tabs[index - 1].fullPath)
         }
       }
       // 删除标签
-      this.tabs = this.tabs.filter(item => {
+      this.tabs = this.tabs.filter((item) => {
         return item.fullPath !== fullPath
       })
       // 删除后如果清空了，就跳转到默认首页
-      if (tabsLength - 1 === 0) router.push('/')
+      if (tabsLength - 1 === 0)
+        router.push('/')
     },
 
     closeOtherTabs(fullPath: string) {
@@ -76,7 +82,7 @@ export const useTabStore = defineStore('tab-store', {
 
     hasExistTab(fullPath: string) {
       const _tabs = [...this.tabs, ...this.pinTabs]
-      return _tabs.some(item => {
+      return _tabs.some((item) => {
         return item.fullPath === fullPath
       })
     },
@@ -85,7 +91,7 @@ export const useTabStore = defineStore('tab-store', {
       this.currentTabPath = fullPath
     },
     getTabIndex(fullPath: string) {
-      return this.tabs.findIndex(item => {
+      return this.tabs.findIndex((item) => {
         return item.fullPath === fullPath
       })
     },

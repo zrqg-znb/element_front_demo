@@ -25,9 +25,7 @@
 /* fade-bottom */
 .fade-bottom-enter-active,
 .fade-bottom-leave-active {
-  transition:
-    opacity 0.25s,
-    transform 0.3s;
+  transition: opacity 0.25s, transform 0.3s;
 }
 .fade-bottom-enter-from {
   opacity: 0;
@@ -55,9 +53,7 @@
 /* zoom-fade */
 .zoom-fade-enter-active,
 .zoom-fade-leave-active {
-  transition:
-    transform 0.2s,
-    opacity 0.3s ease-out;
+  transition: transform 0.2s, opacity 0.3s ease-out;
 }
 .zoom-fade-enter-from {
   opacity: 0;
@@ -71,9 +67,7 @@
 /* zoom-out */
 .zoom-out-enter-active,
 .zoom-out-leave-active {
-  transition:
-    opacity 0.1s ease-in-out,
-    transform 0.15s ease-out;
+  transition: opacity 0.1s ease-in-out, transform 0.15s ease-out;
 }
 .zoom-out-enter-from,
 .zoom-out-leave-to {
@@ -84,9 +78,7 @@
 /* fade */
 .fade-enter-active,
 .fade-leave-active {
-  transition:
-    opacity 0.2s,
-    filter 0.2s ease-out;
+  transition: opacity 0.2s, filter 0.2s ease-out;
 }
 
 .fade-enter-from {

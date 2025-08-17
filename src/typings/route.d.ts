@@ -1,4 +1,5 @@
 declare namespace AppRoute {
+
   type MenuType = 'dir' | 'page'
   /** 单个路由所携带的meta标识 */
   interface RouteMeta {
@@ -59,4 +60,5 @@ declare namespace AppRoute {
     /** 路由描述 */
     meta: RouteMeta
   }
+
 }

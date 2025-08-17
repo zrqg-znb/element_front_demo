@@ -81,7 +81,8 @@ export async function handleRefreshToken() {
   if (data) {
     local.set('accessToken', data.accessToken)
     local.set('refreshToken', data.refreshToken)
-  } else {
+  }
+  else {
     // 刷新失败，退出
     await authStore.logout()
   }

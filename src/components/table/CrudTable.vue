@@ -1,31 +1,5 @@
-<template>
-  <div v-bind="$attrs">
-    <QueryBar v-if="$slots.queryBar" mb-10px @search="handleSearch" @reset="handleReset">
-      <slot name="queryBar" />
-    </QueryBar>
-
-    <!-- 操作按钮栏 -->
-    <div v-if="$slots.tableHeader" mb-20px flex justify-between items-center>
-      <slot name="tableHeader" />
-    </div>
-
-    <n-data-table
-      :remote="remote"
-      :loading="loading"
-      :columns="columns"
-      :data="tableData"
-      :scroll-x="scrollX"
-      :row-key="row => row[rowKey]"
-      :pagination="isPagination ? pagination : false"
-      @update:checked-row-keys="onChecked"
-      @update:page="onPageChange"
-      @update:page-size="onPageSizeChange"
-    />
-  </div>
-</template>
-
 <script setup>
-import { ref, reactive, nextTick, watch } from 'vue'
+import { nextTick, reactive, ref } from 'vue'
 import QueryBar from '../query-bar/QueryBar.vue'
 
 const props = defineProps({
@@ -109,11 +83,11 @@ function filterValidParams(params) {
   for (const key in params) {
     const value = params[key]
     if (
-      value !== null &&
-      value !== undefined &&
-      value !== '' &&
-      value !== 'null' &&
-      value !== 'undefined'
+      value !== null
+      && value !== undefined
+      && value !== ''
+      && value !== 'null'
+      && value !== 'undefined'
     ) {
       filtered[key] = value
     }
@@ -156,25 +130,30 @@ async function handleQuery() {
         // 分页数据格式
         tableData.value = response.items
         pagination.itemCount = response.pagination?.total_items || 0
-      } else if (Array.isArray(response)) {
+      }
+      else if (Array.isArray(response)) {
         // 数组格式
         tableData.value = response
         pagination.itemCount = response.length
-      } else {
+      }
+      else {
         // 其他格式
         tableData.value = response.data || []
         pagination.itemCount = tableData.value.length
       }
-    } else {
+    }
+    else {
       tableData.value = []
       pagination.itemCount = 0
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('获取数据失败:', error)
     tableData.value = []
     pagination.itemCount = 0
     // Alova的错误已经在拦截器中处理了，这里不需要再显示错误消息
-  } finally {
+  }
+  finally {
     emit('onDataChange', tableData.value)
     loading.value = false
   }
@@ -236,3 +215,29 @@ defineExpose({
   loading,
 })
 </script>
+
+<template>
+  <div v-bind="$attrs">
+    <QueryBar v-if="$slots.queryBar" mb-10px @search="handleSearch" @reset="handleReset">
+      <slot name="queryBar" />
+    </QueryBar>
+
+    <!-- 操作按钮栏 -->
+    <div v-if="$slots.tableHeader" mb-20px flex justify-between items-center>
+      <slot name="tableHeader" />
+    </div>
+
+    <n-data-table
+      :remote="remote"
+      :loading="loading"
+      :columns="columns"
+      :data="tableData"
+      :scroll-x="scrollX"
+      :row-key="row => row[rowKey]"
+      :pagination="isPagination ? pagination : false"
+      @update:checked-row-keys="onChecked"
+      @update:page="onPageChange"
+      @update:page-size="onPageSizeChange"
+    />
+  </div>
+</template>

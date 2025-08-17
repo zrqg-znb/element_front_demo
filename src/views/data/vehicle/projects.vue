@@ -1,90 +1,6 @@
-<template>
-  <div>
-    <CrudTable
-      ref="tableRef"
-      v-model:query-items="queryItems"
-      :columns="columns"
-      :get-data="projectApi.getProjectList"
-      @on-checked="handleChecked"
-    >
-      <template #queryBar>
-        <QueryBarItem label="项目名称">
-          <n-input v-model:value="queryItems.name" placeholder="请输入项目名称" clearable />
-        </QueryBarItem>
-        <QueryBarItem label="项目状态">
-          <n-select
-            v-model:value="queryItems.is_active"
-            placeholder="请选择状态"
-            clearable
-            :options="statusOptions"
-          />
-        </QueryBarItem>
-      </template>
-
-      <template #tableHeader>
-        <div class="flex">
-          <n-button type="primary" @click="handleAdd">
-            <template #icon>
-              <nova-icon icon="icon-park-outline:plus" />
-            </template>
-            新增项目
-          </n-button>
-          <n-button
-            v-if="checkedRowKeys.length > 0"
-            ml-10px
-            type="error"
-            @click="handleBatchDelete"
-          >
-            批量删除
-          </n-button>
-        </div>
-      </template>
-    </CrudTable>
-
-    <!-- 新增/编辑弹窗 -->
-    <CrudModal
-      v-model:visible="modalVisible"
-      :title="modalTitle"
-      :loading="modalLoading"
-      @save="handleSave"
-      @cancel="handleCancel"
-    >
-      <n-form
-        ref="formRef"
-        :model="formData"
-        :rules="rules"
-        label-placement="left"
-        label-width="100px"
-      >
-        <n-form-item label="项目名称" path="name">
-          <n-input v-model:value="formData.name" placeholder="请输入项目名称" />
-        </n-form-item>
-        <n-form-item label="项目状态" path="is_active">
-          <n-switch
-            v-model:value="formData.is_active"
-            :checked-value="true"
-            :unchecked-value="false"
-          >
-            <template #checked>启用</template>
-            <template #unchecked>禁用</template>
-          </n-switch>
-        </n-form-item>
-        <n-form-item label="项目描述" path="description">
-          <n-input
-            v-model:value="formData.description"
-            type="textarea"
-            placeholder="请输入项目描述"
-            :autosize="{ minRows: 3, maxRows: 6 }"
-          />
-        </n-form-item>
-      </n-form>
-    </CrudModal>
-  </div>
-</template>
-
 <script setup>
-import { ref, reactive, h } from 'vue'
-import { NButton, NTag, NPopconfirm } from 'naive-ui'
+import { h, reactive, ref } from 'vue'
+import { NButton, NPopconfirm, NTag } from 'naive-ui'
 import CrudTable from '@/components/table/CrudTable.vue'
 import CrudModal from '@/components/table/CrudModal.vue'
 import QueryBarItem from '@/components/query-bar/QueryBarItem.vue'
@@ -235,7 +151,8 @@ async function handleDelete(row) {
       window.$message?.success('删除成功')
       tableRef.value?.refresh()
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('删除失败:', error)
   }
 }
@@ -253,7 +170,8 @@ async function handleBatchDelete() {
     window.$message?.success('批量删除成功')
     checkedRowKeys.value = []
     tableRef.value?.refresh()
-  } catch (error) {
+  }
+  catch (error) {
     console.error('批量删除失败:', error)
   }
 }
@@ -273,9 +191,11 @@ async function handleSave() {
       modalVisible.value = false
       tableRef.value?.refresh()
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('保存失败:', error)
-  } finally {
+  }
+  finally {
     modalLoading.value = false
   }
 }
@@ -295,3 +215,91 @@ function resetForm() {
   formRef.value?.restoreValidation()
 }
 </script>
+
+<template>
+  <div>
+    <CrudTable
+      ref="tableRef"
+      v-model:query-items="queryItems"
+      :columns="columns"
+      :get-data="projectApi.getProjectList"
+      @on-checked="handleChecked"
+    >
+      <template #queryBar>
+        <QueryBarItem label="项目名称">
+          <n-input v-model:value="queryItems.name" placeholder="请输入项目名称" clearable />
+        </QueryBarItem>
+        <QueryBarItem label="项目状态">
+          <n-select
+            v-model:value="queryItems.is_active"
+            placeholder="请选择状态"
+            clearable
+            :options="statusOptions"
+          />
+        </QueryBarItem>
+      </template>
+
+      <template #tableHeader>
+        <div class="flex">
+          <NButton type="primary" @click="handleAdd">
+            <template #icon>
+              <NovaIcon icon="icon-park-outline:plus" />
+            </template>
+            新增项目
+          </NButton>
+          <NButton
+            v-if="checkedRowKeys.length > 0"
+            ml-10px
+            type="error"
+            @click="handleBatchDelete"
+          >
+            批量删除
+          </NButton>
+        </div>
+      </template>
+    </CrudTable>
+
+    <!-- 新增/编辑弹窗 -->
+    <CrudModal
+      v-model:visible="modalVisible"
+      :title="modalTitle"
+      :loading="modalLoading"
+      @save="handleSave"
+      @cancel="handleCancel"
+    >
+      <n-form
+        ref="formRef"
+        :model="formData"
+        :rules="rules"
+        label-placement="left"
+        label-width="100px"
+      >
+        <n-form-item label="项目名称" path="name">
+          <n-input v-model:value="formData.name" placeholder="请输入项目名称" />
+        </n-form-item>
+        <n-form-item label="项目状态" path="is_active">
+          <n-switch
+            v-model:value="formData.is_active"
+            :checked-value="true"
+            :unchecked-value="false"
+          >
+            <template #checked>
+              启用
+            </template>
+            <template #unchecked>
+              禁用
+            </template>
+          </n-switch>
+        </n-form-item>
+        <n-form-item label="项目描述" path="description">
+          <n-input
+            v-model:value="formData.description"
+            type="textarea"
+            placeholder="请输入项目描述"
+            :autosize="{ minRows: 3, maxRows: 6 }"
+          />
+        </n-form-item>
+      </n-form>
+    </CrudModal>
+  </div>
+</template>

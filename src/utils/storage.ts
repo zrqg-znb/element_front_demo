@@ -21,13 +21,15 @@ function createLocalStorage<T extends Storage.Local>() {
 
   function get<K extends keyof T>(key: K) {
     const json = window.localStorage.getItem(`${STORAGE_PREFIX}${String(key)}`)
-    if (!json) return null
+    if (!json)
+      return null
 
     const storageData: StorageData<T[K]> | null = JSON.parse(json)
 
     if (storageData) {
       const { value, expire } = storageData
-      if (expire === null || expire >= Date.now()) return value
+      if (expire === null || expire >= Date.now())
+        return value
     }
     remove(key)
     return null
@@ -57,11 +59,13 @@ function createSessionStorage<T extends Storage.Session>() {
   }
   function get<K extends keyof T>(key: K) {
     const json = sessionStorage.getItem(`${STORAGE_PREFIX}${String(key)}`)
-    if (!json) return null
+    if (!json)
+      return null
 
     const storageData: T[K] | null = JSON.parse(json)
 
-    if (storageData) return storageData
+    if (storageData)
+      return storageData
 
     return null
   }

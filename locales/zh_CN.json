@@ -64,7 +64,7 @@
     "mixMenu": "混合菜单"
   },
   "http": {
-    "400": "请求参数错误",
+    "400": "请求出现语法错误",
     "401": "用户未授权",
     "403": "服务器拒绝访问",
     "404": "请求的资源不存在",
@@ -144,7 +144,6 @@
     "documentsVite": "Vite",
     "documentsVueuse": "VueUse（外链）",
     "documentsNova": "Nova 文档",
-    "documentsPublic": "公共示例页（外链）",
     "permission": "权限",
     "permissionDemo": "权限示例",
     "justSuper": "super可见",

@@ -1,22 +1,25 @@
 <script setup lang="ts">
+import { mapEntries } from 'radash'
+
 interface Props {
   disabled?: boolean
 }
 
-const { disabled = false } = defineProps<Props>()
+const {
+  disabled = false,
+} = defineProps<Props>()
 
 interface IconList {
   prefix: string
   icons: string[]
   title: string
   total: number
-  categories?: Record<string, string[]>
-  uncategorized?: string[]
+  categories: Record<string, string[]>
 }
 const value = defineModel('value', { type: String })
 
-// 包含的图标库系列名，更多：https://icon-sets.iconify.design/
-const nameList = ['icon-park-outline', 'carbon', 'ant-design']
+// 包含的图标库系列名
+const nameList = ['icon-park-outline', 'carbon']
 
 // 获取单个图标库数据
 async function fetchIconList(name: string): Promise<IconList> {
@@ -25,39 +28,47 @@ async function fetchIconList(name: string): Promise<IconList> {
 
 // 获取所有图标库数据
 async function fetchIconAllList(nameList: string[]) {
-  // 并行请求所有图标列表
-  const targets = await Promise.all(nameList.map(fetchIconList))
+  const namePromises = nameList.map(name => fetchIconList(name))
+  const targets = await Promise.all(namePromises)
 
-  // 处理每个返回的图标数据
-  const iconList = targets.map(item => {
-    const icons = [
-      ...(item.categories ? Object.values(item.categories).flat() : []),
-      ...(item.uncategorized ? Object.values(item.uncategorized).flat() : []),
-    ]
-    return { ...item, icons }
+  return targets.map((i) => {
+    i.icons = Object.entries(i.categories).reduce((prev, next) => {
+      const [_key, value] = next
+      return prev.concat(value)
+    }, [] as string[])
+    return i
+  })
+}
+// 获取svg文件名
+function getSvgName(path: string) {
+  const regex = /\/([^/]+)\.svg$/
+  const match = path.match(regex)
+  if (match) {
+    const fileName = match[1]
+    return fileName
+  }
+  return path
+}
+
+// 获取所有本地图标
+function generateLocalIconList() {
+  const localSvgList = import.meta.glob('@/assets/svg-icons/*.svg', {
+    query: '?raw',
+    import: 'default',
+    eager: true,
   })
 
-  // 处理本地图标
-  const svgNames = Object.keys(import.meta.glob('@/assets/svg-icons/*.svg'))
-    .map(path => path.split('/').pop()?.replace('.svg', ''))
-    .filter(Boolean) as string[] // 过滤掉 undefined 并断言为 string[]
-
-  // 在数组开头添加
-  iconList.unshift({
-    prefix: 'local',
-    title: 'Local Icons',
-    icons: svgNames,
-    total: svgNames.length,
-    uncategorized: svgNames,
+  return mapEntries(localSvgList, (key, value) => {
+    return [getSvgName(key), value]
   })
-
-  return iconList
 }
 
 const iconList = shallowRef<IconList[]>([])
+const LocalIconList = shallowRef({})
 
 onMounted(async () => {
   iconList.value = await fetchIconAllList(nameList)
+  LocalIconList.value = generateLocalIconList()
 })
 
 // 当前tab
@@ -65,18 +76,16 @@ const currentTab = shallowRef(0)
 // 当前tag
 const currentTag = shallowRef('')
 
+// 切换tab
+function handleChangeTab(index: number) {
+  currentTab.value = index
+  currentTag.value = ''
+}
 // 搜索图标输入框值
 const searchValue = ref('')
 
 // 当前页数
 const currentPage = shallowRef(1)
-
-// 切换tab
-function handleChangeTab(index: number) {
-  currentTab.value = index
-  currentTag.value = ''
-  currentPage.value = 1
-}
 
 // 选择分类tag
 function handleSelectIconTag(icon: string) {
@@ -86,21 +95,17 @@ function handleSelectIconTag(icon: string) {
 
 // 包含当前分类或所有图标列表
 const icons = computed(() => {
-  if (!iconList.value[currentTab.value]) return []
   const hasTag = !!currentTag.value
-  return hasTag
-    ? iconList.value[currentTab.value]?.categories?.[currentTag.value] || [] // 使用可选链
-    : iconList.value[currentTab.value].icons || []
+  if (hasTag)
+    return iconList.value[currentTab.value]?.categories[currentTag.value]
+  else
+    return iconList.value[currentTab.value].icons
 })
 
 // 符合搜索条件的图标列表
-const filteredIcons = computed(() => {
-  return icons.value?.filter(i => i.includes(searchValue.value)) || []
-})
-
-// 当前页显示的图标
 const visibleIcons = computed(() => {
-  return filteredIcons.value.slice((currentPage.value - 1) * 200, currentPage.value * 200)
+  return icons.value?.filter(i => i
+    .includes(searchValue.value))?.slice((currentPage.value - 1) * 200, (currentPage.value) * 200)
 })
 
 const showModal = ref(false)
@@ -125,22 +130,13 @@ function clearIcon() {
         <nova-icon :icon="value" />
       </template>
     </n-button>
-    <n-input
-      :value="value"
-      readonly
-      :placeholder="$t('components.iconSelector.inputPlaceholder')"
-    />
+    <n-input :value="value" readonly :placeholder="$t('components.iconSelector.inputPlaceholder')" />
     <n-button type="primary" ghost :disabled="disabled" @click="showModal = true">
       {{ $t('common.choose') }}
     </n-button>
   </n-input-group>
   <n-modal
-    v-model:show="showModal"
-    preset="card"
-    :title="$t('components.iconSelector.selectorTitle')"
-    size="small"
-    class="w-800px"
-    :bordered="false"
+    v-model:show="showModal" preset="card" :title="$t('components.iconSelector.selectorTitle')" size="small" class="w-800px" :bordered="false"
   >
     <template #header-extra>
       <n-button type="warning" size="small" ghost @click="clearIcon">
@@ -148,28 +144,25 @@ function clearIcon() {
       </n-button>
     </template>
 
-    <n-tabs
-      :value="currentTab"
-      type="line"
-      animated
-      placement="left"
-      @update:value="handleChangeTab"
-    >
-      <n-tab-pane
-        v-for="(list, index) in iconList"
-        :key="list.prefix"
-        :name="index"
-        :tab="list.title"
-      >
+    <n-tabs :value="currentTab" type="line" animated placement="left" @update:value="handleChangeTab">
+      <n-tab-pane name="local" tab="local">
+        <n-flex :size="2">
+          <n-el
+            v-for="(_icon, key) in LocalIconList" :key="key"
+            class="hover:(text-[var(--primary-color)] ring-1) ring-[var(--primary-color)] p-1 rounded flex-center"
+            :title="`local:${key}`"
+            @click="handleSelectIcon(`local:${key}`)"
+          >
+            <nova-icon :icon="`local:${key}`" :size="24" />
+          </n-el>
+        </n-flex>
+      </n-tab-pane>
+      <n-tab-pane v-for="(list, index) in iconList" :key="list.prefix" :name="index" :tab="list.title">
         <n-flex vertical>
           <n-flex size="small">
             <n-tag
-              v-for="(_v, k) in list.categories"
-              :key="k"
-              :checked="currentTag === k"
-              round
-              checkable
-              size="small"
+              v-for="(_v, k) in list.categories" :key="k"
+              :checked="currentTag === k" round checkable size="small"
               @update:checked="handleSelectIconTag(k)"
             >
               {{ k }}
@@ -177,17 +170,14 @@ function clearIcon() {
           </n-flex>
 
           <n-input
-            v-model:value="searchValue"
-            type="text"
-            clearable
+            v-model:value="searchValue" type="text" clearable
             :placeholder="$t('components.iconSelector.searchPlaceholder')"
           />
 
           <div>
             <n-flex :size="2">
               <n-el
-                v-for="icon in visibleIcons"
-                :key="icon"
+                v-for="(icon) in visibleIcons" :key="icon"
                 class="hover:(text-[var(--primary-color)] ring-1) ring-[var(--primary-color)] p-1 rounded flex-center"
                 :title="`${list.prefix}:${icon}`"
                 @click="handleSelectIcon(`${list.prefix}:${icon}`)"
@@ -201,7 +191,7 @@ function clearIcon() {
           <n-flex justify="center">
             <n-pagination
               v-model:page="currentPage"
-              :item-count="filteredIcons.length"
+              :item-count="icons?.length"
               :page-size="200"
             />
           </n-flex>

@@ -26,7 +26,8 @@ const { onAuthRequired, onResponseRefreshToken } = createServerTokenAuthenticati
       // 此处采取限制，防止过期请求无限循环重发
       if (!method.meta) {
         method.meta = { isExpired: true }
-      } else {
+      }
+      else {
         method.meta.isExpired = true
       }
 
@@ -34,7 +35,7 @@ const { onAuthRequired, onResponseRefreshToken } = createServerTokenAuthenticati
     },
   },
   // 添加token到请求头
-  assignToken: method => {
+  assignToken: (method) => {
     method.config.headers.Authorization = `Bearer ${local.get('accessToken')}`
   },
 })
@@ -54,7 +55,7 @@ export function createAlovaInstance(
     baseURL: _alovaConfig.baseURL,
     timeout: _alovaConfig.timeout,
 
-    beforeRequest: onAuthRequired(method => {
+    beforeRequest: onAuthRequired((method) => {
       if (method.meta?.isFormPost) {
         method.config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         method.data = new URLSearchParams(method.data as URLSearchParams).toString()
@@ -62,7 +63,6 @@ export function createAlovaInstance(
       alovaConfig.beforeRequest?.(method)
     }),
     responded: onResponseRefreshToken({
-      // 请求成功的拦截器
       // 请求成功的拦截器
       onSuccess: async (response, method) => {
         const { status } = response
@@ -103,7 +103,7 @@ export function createAlovaInstance(
         window.$message?.warning(tip)
       },
 
-      onComplete: async _method => {
+      onComplete: async (_method) => {
         // 处理请求完成逻辑
       },
     }),

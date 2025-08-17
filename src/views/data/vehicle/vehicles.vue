@@ -1,6 +1,6 @@
 <script setup>
-import { reactive, ref, h, onMounted } from 'vue'
-import { NButton, NIcon, NInput, NPopconfirm, NSelect, NTag, NForm, NFormItem } from 'naive-ui'
+import { h, onMounted, reactive, ref } from 'vue'
+import { NButton, NForm, NFormItem, NInput, NPopconfirm, NSelect, NTag } from 'naive-ui'
 import CrudTable from '@/components/table/CrudTable.vue'
 import CrudModal from '@/components/table/CrudModal.vue'
 import QueryBarItem from '@/components/query-bar/QueryBarItem.vue'
@@ -136,9 +136,11 @@ async function loadProjectOptions() {
         value: item.id,
       }))
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('加载项目选项失败:', error)
-  } finally {
+  }
+  finally {
     projectLoading.value = false
   }
 }
@@ -165,7 +167,7 @@ function handleEdit(row) {
   // 处理管道数据格式
   const formattedPipelines = []
   if (row.pipelines && row.pipelines.length > 0) {
-    row.pipelines.forEach(pipeline => {
+    row.pipelines.forEach((pipeline) => {
       const pipelineName = Object.keys(pipeline)[0]
       formattedPipelines.push({
         name: pipelineName,
@@ -192,7 +194,8 @@ async function handleDelete(row) {
       window.$message?.success('删除成功')
       tableRef.value?.refresh()
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('删除失败:', error)
   }
 }
@@ -210,7 +213,8 @@ async function handleBatchDelete() {
     window.$message?.success('批量删除成功')
     checkedRowKeys.value = []
     tableRef.value?.refresh()
-  } catch (error) {
+  }
+  catch (error) {
     console.error('批量删除失败:', error)
   }
 }
@@ -234,9 +238,11 @@ async function handleSave() {
       modalVisible.value = false
       tableRef.value?.refresh()
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('保存失败:', error)
-  } finally {
+  }
+  finally {
     modalLoading.value = false
   }
 }
@@ -275,7 +281,7 @@ function removePipeline(index) {
 function formatPipelinesForSubmit() {
   return formData.pipelines
     .filter(p => p.name && p.value) // 过滤掉空的管道
-    .map(p => {
+    .map((p) => {
       const pipelineObj = {}
       pipelineObj[p.name] = p.value
       return pipelineObj
@@ -320,7 +326,7 @@ onMounted(() => {
         <div class="flex">
           <NButton type="primary" @click="handleAdd">
             <template #icon>
-              <NovaIcon icon="icon-park-outline:add"></NovaIcon>
+              <NovaIcon icon="icon-park-outline:add" />
             </template>
             新增车型
           </NButton>

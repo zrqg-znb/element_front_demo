@@ -81,9 +81,10 @@ export function useEcharts(ref: string, chartOptions: Ref<ECOption>) {
 
   async function render() {
     // 宽或高不存在时不渲染
-    if (!width || !height) return
+    if (!width || !height)
+      return
 
-    const chartTheme = appStore.colorMode === 'dark' ? 'dark' : 'light'
+    const chartTheme = appStore.colorMode ? 'dark' : 'light'
     await nextTick()
     if (el) {
       chart = echarts.init(el.value, chartTheme)
@@ -103,20 +104,13 @@ export function useEcharts(ref: string, chartOptions: Ref<ECOption>) {
   }
 
   watch([width, height], async ([newWidth, newHeight]) => {
-    if (isRendered() && newWidth && newHeight) chart?.resize()
+    if (isRendered() && newWidth && newHeight)
+      chart?.resize()
   })
 
-  watch(chartOptions, newValue => {
+  watch(chartOptions, (newValue) => {
     update(newValue)
   })
-
-  watch(
-    () => appStore.colorMode,
-    () => {
-      destroy()
-      render()
-    },
-  )
 
   onMounted(() => {
     render()

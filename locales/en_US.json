@@ -114,7 +114,6 @@
     "documentsVue": "Vue",
     "documentsVueuse": "VueUse (external link)",
     "documentsNova": "Nova docs",
-    "documentsPublic": "Public page (external link)",
     "echarts": "Echarts",
     "editor": "Editor",
     "editorMd": "MarkDown editor",
@@ -133,7 +132,7 @@
     "dict": "Dictionary example"
   },
   "http": {
-    "400": "Request parameter error",
+    "400": "Syntax error in the request",
     "401": "User unauthorized",
     "403": "Server refused access",
     "404": "Requested resource does not exist",

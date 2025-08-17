@@ -11,11 +11,19 @@ const model = defineModel<string>()
 
 const appStore = useAppStore()
 
-const toolbarsExclude: ToolbarNames[] = ['mermaid', 'katex', 'github', 'htmlPreview', 'catalog']
+const toolbarsExclude: ToolbarNames[] = [
+  'mermaid',
+  'katex',
+  'github',
+  'htmlPreview',
+  'catalog',
+]
 </script>
 
 <template>
-  <MdEditor v-model="model" :theme="appStore.colorMode" :toolbars-exclude="toolbarsExclude" />
+  <MdEditor
+    v-model="model" :theme="appStore.colorMode" :toolbars-exclude="toolbarsExclude"
+  />
 </template>
 
 <style scoped></style>

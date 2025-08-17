@@ -3,10 +3,6 @@ import { installRouter } from '@/router'
 import { installPinia } from '@/store'
 import AppVue from './App.vue'
 import AppLoading from './components/common/AppLoading.vue'
-import VxeUITable from 'vxe-table'
-import 'vxe-table/lib/style.css'
-import VxeUIAll from 'vxe-pc-ui'
-import 'vxe-pc-ui/lib/style.css'
 
 async function setupApp() {
   // 载入全局loading加载状态
@@ -28,9 +24,6 @@ async function setupApp() {
       eager: true,
     }),
   ).map(i => app.use(i))
-
-  app.use(VxeUITable)
-  app.use(VxeUIAll)
 
   // 卸载载入动画
   appLoading.unmount()
