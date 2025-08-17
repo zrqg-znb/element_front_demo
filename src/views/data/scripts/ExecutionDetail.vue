@@ -1,6 +1,6 @@
 <script setup>
 import { h, ref } from 'vue'
-import { NButton, NCode, NDescriptions, NDescriptionsItem, NDivider, NModal, NTabPane, NTabs, NTag } from 'naive-ui'
+import { NButton, NCode, NDatePicker, NDescriptions, NDescriptionsItem, NDivider, NModal, NTabPane, NTabs, NTag } from 'naive-ui'
 import CrudTable from '@/components/table/CrudTable.vue'
 import QueryBarItem from '@/components/query-bar/QueryBarItem.vue'
 import { executionApi } from '@/service'
@@ -14,6 +14,8 @@ const queryItems = ref({
   script_id: route.query.script_id || null,
   script_name: null,
   status: null,
+  start_time: null,
+  end_time: null,
 })
 
 // 移除了脚本选项相关代码，改为使用输入框模糊搜索
@@ -137,6 +139,26 @@ async function handleViewDetail(row) {
             placeholder="请选择状态"
             clearable
             :options="statusOptions"
+          />
+        </QueryBarItem>
+        <QueryBarItem label="开始时间">
+          <NDatePicker
+            v-model:value="queryItems.start_time"
+            type="datetime"
+            placeholder="请选择开始时间"
+            format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            clearable
+          />
+        </QueryBarItem>
+        <QueryBarItem label="结束时间">
+          <NDatePicker
+            v-model:value="queryItems.end_time"
+            type="datetime"
+            placeholder="请选择结束时间"
+            format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            clearable
           />
         </QueryBarItem>
       </template>
