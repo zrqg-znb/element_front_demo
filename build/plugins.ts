@@ -3,6 +3,8 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import AutoImport from 'unplugin-auto-import/vite'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
+import tailwindcss from '@tailwindcss/vite'
+
 // https://github.com/antfu/unplugin-icons
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
@@ -23,6 +25,7 @@ export function createVitePlugins(env: ImportMetaEnv) {
     vue(),
     vueJsx(),
     VueDevTools(),
+    tailwindcss(),
 
     // support unocss
     UnoCSS(),
