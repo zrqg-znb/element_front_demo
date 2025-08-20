@@ -1,20 +1,64 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
+// Reviews data
+const reviews = [
+  {
+    name: 'Jack',
+    username: '@jack',
+    body: 'I\'ve never seen anything like this before. It\'s amazing. I love it.',
+    img: 'https://avatar.vercel.sh/jack',
+  },
+  {
+    name: 'Jill',
+    username: '@jill',
+    body: 'I don\'t know what to say. I\'m speechless. This is amazing.',
+    img: 'https://avatar.vercel.sh/jill',
+  },
+  {
+    name: 'John',
+    username: '@john',
+    body: 'I\'m at a loss for words. This is amazing. I love it.',
+    img: 'https://avatar.vercel.sh/john',
+  },
+  {
+    name: 'Jane',
+    username: '@jane',
+    body: 'I\'m at a loss for words. This is amazing. I love it.',
+    img: 'https://avatar.vercel.sh/jane',
+  },
+  {
+    name: 'Jenny',
+    username: '@jenny',
+    body: 'I\'m at a loss for words. This is amazing. I love it.',
+    img: 'https://avatar.vercel.sh/jenny',
+  },
+  {
+    name: 'James',
+    username: '@james',
+    body: 'I\'m at a loss for words. This is amazing. I love it.',
+    img: 'https://avatar.vercel.sh/james',
+  },
+]
+
+// Split reviews into two rows
+const firstRow = ref(reviews.slice(0, reviews.length / 2))
+const secondRow = ref(reviews.slice(reviews.length / 2))
 </script>
 
 <template>
-  <div class="w-full h-100">
+  <div class="w-full min-w-[100em]">
     <BubbleBg class="w-full h-96" />
   </div>
   <n-grid
-    :x-gap="16"
-    :y-gap="16"
+    class="w-full min-w-[100em]"
   >
     <n-gi :span="8">
       <n-space
         vertical
         :size="16"
       >
-        <CardContainer class="w-full">
+        <CardContainer class="w-full ">
           <CardBody
             class="group/card relative size-auto rounded-xl border border-black/[0.1] bg-gray-50 p-6 sm:w-[30rem] dark:border-white/[0.2] dark:bg-black dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1]"
           >
@@ -160,6 +204,54 @@
       </n-space>
     </n-gi>
   </n-grid>
+  <div class="min-w-[100em]">
+    <div
+      class="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background md:shadow-xl"
+    >
+      <!-- First Marquee -->
+      <Marquee
+        pause-on-hover
+        class="[--duration:20s]"
+      >
+        <ReviewCard
+          v-for="review in firstRow"
+          :key="review.username"
+          :img="review.img"
+          :name="review.name"
+          :username="review.username"
+          :body="review.body"
+        />
+      </Marquee>
+
+      <!-- Second Marquee (reverse) -->
+      <Marquee
+        reverse
+        pause-on-hover
+        class="[--duration:20s]"
+      >
+        <ReviewCard
+          v-for="review in secondRow"
+          :key="review.username"
+          :img="review.img"
+          :name="review.name"
+          :username="review.username"
+          :body="review.body"
+        />
+      </Marquee>
+
+      <!-- Left Gradient -->
+      <div
+        class="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white dark:from-background"
+      />
+
+      <!-- Right Gradient -->
+      <div
+        class="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white dark:from-background"
+      />
+    </div>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>
